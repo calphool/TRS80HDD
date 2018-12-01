@@ -19,7 +19,7 @@ couldn't interface to a floppy drive unless you purchased the Expansion System. 
 essentially a large daughter board and a power supply.  It connected to your TRS-80 via a ribbon cable attached 
 to the expansion bus on the keyboard/CPU unit.  Inside was a fairly complex set of components.  There's a real time
 clock module that keeps pinging the CPU unit 40 times a second.  There's additional DRAM in there.  There's a bunch
-of glue code that allows you to connect a parallel port printer (remember those?) and a UART for (very slow) 
+of glue logic that allows you to connect a parallel port printer (remember those?) and a UART for (very slow) 
 RS232 / modem connectivity.  Finally, there's an [FD1771](https://en.wikipedia.org/wiki/Western_Digital_FD1771) chip.
 That chip is one of the first floppy disk controller chips.  It was released in 1976, and was used in various forms 
 up into the 1990s.  On one side of the chip you've got an interface designed to connect to a system bus, and on the 
