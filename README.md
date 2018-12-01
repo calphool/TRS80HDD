@@ -42,4 +42,5 @@ Help/Advice
 
 If you happen to have any experience with 8-bit hardware interfacing, I would certainly appreciate an opportunity to chat.
 If you have access to a decent Logic Analyzer and are willing to loan it out, that would be even more awesome, since 
-I find that trying to debug this emulator with nothing more than a 4-channel oscillator ends up being a challenge.
+I find that trying to debug this emulator with nothing more than a 4-channel oscilloscope ends up being a challenge.
+
