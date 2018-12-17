@@ -284,8 +284,6 @@ void setup() {
 /*                                                                         */
 /* Then switch into each address's intended function                       */
 void loop() {
-    static int i;
-    i++;
     if(activeInterrupt == NOTHING) {
     }
     else {
@@ -339,7 +337,7 @@ void loop() {
           else {
             L2_VIOLET(); 
             p("Disk drive select latch - %d %1X %1X\n", activeInterrupt, a1, a0);
-            setDataBus(i);           
+            setDataBus(0);           
           }
         
         }
