@@ -1,5 +1,5 @@
 # TRS80HDD
-Repo for TRS-80 Model 1 Hard Drive emulator project
+Repo for TRS-80 Model 1 Drive emulator project
 
 
 ![Version 2 of PCB](/img/TRS80HDD_v2.jpg?raw=true "Version 2 of PCB")
@@ -12,7 +12,7 @@ nice.
 Theory of Operation
 ===================
 
-To understand how this card works (in theory... still working out some bugs as of October 2018), you have to 
+To understand how this card works (in theory... still working out some bugs as of December 2018), you have to 
 understand how the TRS-80 expected to interface to floppy drives.  I'm in awe of what engineers in 1977 had to 
 deal with to produce a working computer.  We take so much for granted today.  First of all, the TRS-80 Model 1
 couldn't interface to a floppy drive unless you purchased the Expansion System.  That expansion system is 
@@ -36,6 +36,20 @@ and the WAIT state is released.  At least, that's the theory.  I'm still working
 I start working in earnest on the Teensy code.  Basically I've got everything working right now except the data bus.
 The data bus seems to be doing nothing at the moment, and I haven't figured out exactly what's wrong yet.
 
+Build Notes
+===========
+
+December 17, 2018
+
+Well I'm working on version 2 of this project.  I found a copy of Byte Magazine from the late 70s that included a 
+schematic from Steve Ciarcia for his Disk-80 project.  I decided to abandon my home grown address decoder and 
+switched to his design.  The v3 of the schematic represents that.  Upon assembly, it didn't really work, and I 
+was scratching my head.  I reached out to Peter Bartlett, who is the rock star that designed the MISE and M3SE 
+boards that are light years beyond what my little projects are capable of.  He took a look at my schematics and 
+helped me realize that I used a 74LS241 for my data buffer, and I probably meant to use a 74LS244.  The difference 
+is that 74LS241 has four bits that are controlled by a positive enable pin, and the other four are controlled by 
+a negative enable pin.  So I ordered some 74LS244's and we'll see where that gets me.
+
 
 Help/Advice
 ===========
@@ -43,4 +57,3 @@ Help/Advice
 If you happen to have any experience with 8-bit hardware interfacing, I would certainly appreciate an opportunity to chat.
 If you have access to a decent Logic Analyzer and are willing to loan it out, that would be even more awesome, since 
 I find that trying to debug this emulator with nothing more than a 4-channel oscilloscope ends up being a challenge.
-
