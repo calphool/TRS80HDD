@@ -45,14 +45,18 @@
 volatile int activeInterrupt = NOTHING;
 volatile int a0;
 volatile int a1;
-
-volatile int busvalue = 0;
+volatile int port_a;
+volatile int port_c;
+volatile int port_d;
 
 #define IN 0
 #define OUT 1
 #define FALSE 0
 #define TRUE 1
 volatile int iDirection = 2;
+volatile byte b = 0;
+volatile int busvalue;
+
 
 
 /* printf() to serial output */
@@ -157,56 +161,85 @@ void initialPinState() {
 
 /* reset the latch that's tied to TRS-80 WAIT* line */
 inline void resetWaitLatch() {
-  digitalWrite(FF_PRE,HIGH);
+  //digitalWrite(FF_PRE,HIGH);
   digitalWrite(FF_CLR,LOW);
   //delayMicroseconds(1);
   digitalWrite(FF_CLR,HIGH);
 }
 
+/*
+void BinaryStrZeroPad(int Number,char ZeroPadding){
+signed char i=ZeroPadding;
+
+  while(i>=0){
+      if((Number & (1<<i)) > 0) Serial.write('1');
+      else Serial.write('0');
+      --i;
+  }
+
+        Serial.println();
+}
+*/
+
+inline int convertBusValue() {
+  dataInMode();
+  port_a = GPIOA_PDIR;
+  port_c = GPIOC_PDIR;
+  port_d = GPIOD_PDIR;
+  
+  unsigned int bv = (port_d & 0x0001);
+  bv = bv + ((port_a & 0x1000) >> 11);   
+  bv = bv + ((port_a & 0x2000) >> 11);   
+  bv = bv + ((port_d & 0x0080) >> 4);    
+  bv = bv + ((port_d & 0x0010));         
+  bv = bv + ((port_d & 0x0004) << 3);    
+  bv = bv + ((port_d & 0x0008) << 3);    
+  bv = bv + ((port_c & 0x0008) << 4);    
+  
+  return bv;
+}
 
 #define GET_LOW_ADDRESSES()   a0 = digitalReadFast(A0); a1 = digitalReadFast(A1);
-volatile byte b = 0;
 void _37E0WRInterrupt() {
-  //p("_37E0WRInterrupt\n");
   GET_LOW_ADDRESSES()
-  getDataBus();
-  p("37e0 wr %d\n",busvalue);
+  busvalue = convertBusValue();
   activeInterrupt = _37E0WR;    
   resetWaitLatch();    
+  p("37e0 wr %d %d %d\n",busvalue,a1,a0);
 }
 
 void _37E8WRInterrupt() {
-  //p("_37E8WRInterrupt\n");
   GET_LOW_ADDRESSES()
-  getDataBus();
-  p("378e wr %d\n",busvalue);
+  busvalue = convertBusValue();
   activeInterrupt = _37E8WR;  
   resetWaitLatch();
+  p("378e wr %d\n",busvalue);
 }
 
 void _37E4WRInterrupt() {
   GET_LOW_ADDRESSES()
-  getDataBus();
-  p("37e4 wr %d\n",busvalue);
+  busvalue = convertBusValue();
   activeInterrupt = _37E4WR;  
   resetWaitLatch();
+  p("37e4 wr %d\n",busvalue);
 }
 
 void _37ECWRInterrupt() {
   GET_LOW_ADDRESSES()
-  getDataBus();
-  p("37ec wr %d\n",busvalue);
+  busvalue = convertBusValue();
   activeInterrupt = _37ECWR;
   resetWaitLatch();
+  p("37ec wr %d\n",busvalue);
 }
+
 
 void _37ECRDInterrupt() {
   GET_LOW_ADDRESSES()
   activeInterrupt = _37ECRD;
   b++;
   setDataBus(b);
-  p("37ec rd\n");
   resetWaitLatch();
+  p("37ec rd %d\n",b);
 }
 
 void _37E8RDInterrupt() {
@@ -214,8 +247,8 @@ void _37E8RDInterrupt() {
   activeInterrupt = _37E8RD;
   b++;
   setDataBus(b);
-  p("37e8 rd\n");
   resetWaitLatch();
+  p("37e8 rd %d\n",b);
 }
 
 void _37E4RDInterrupt() {
@@ -223,8 +256,8 @@ void _37E4RDInterrupt() {
   activeInterrupt = _37E4RD;
   b++;
   setDataBus(b);
-  p("37e4 rd\n");
   resetWaitLatch();
+  p("37e4 rd %d\n",b);
 }
 
 void _37E0RDInterrupt() {
@@ -232,22 +265,8 @@ void _37E0RDInterrupt() {
   activeInterrupt = _37E0RD;
   b++;
   setDataBus(b);
-  p("37e0 rd\n");
   resetWaitLatch();  
-}
-
-
-/* retrieve content of data bus */
-inline void getDataBus() {
-  dataInMode();
-  busvalue = digitalRead(D7) << 7;
-  busvalue+= (digitalRead(D6) << 6); 
-  busvalue+= (digitalRead(D5) << 5);
-  busvalue+= (digitalRead(D4) << 4);
-  busvalue+= (digitalRead(D3) << 3);
-  busvalue+= (digitalRead(D2) << 2);
-  busvalue+= (digitalRead(D1) << 1);
-  busvalue+= digitalRead(D0);
+  p("37e0 rd %d\n",b);
 }
 
 
@@ -300,92 +319,13 @@ void setup() {
   configureInterrupts(); // tie interrupt lines to code blocks
   L1_GREEN();  
 
-  getDataBus();
-  sei();
+  p("F_CPU: %d\n", F_CPU);
+  p("F_BUS: %d\n", F_BUS);
   p("Ready.\n");
+  sei();
 }
 
 
-int i=0;
-
-/* Main Loop                                                               */
-/* ---------                                                               */
-/* When activeInterrupt changes, split it into a "read" or "write" request */
-/* For read requests, set data bus direction to outward (from the Teensy   */
-/* to the TRS-80).  For write requests, set the data bus direction to      */
-/* inward (from the TRS-80 to the Teensy).                                 */
-/*                                                                         */
-/* Then switch into each address's intended function                       */
-
-/* NOTE */
-/* At this time it doesn't APPEAR that this loop is necessary.  It *looks* */
-/* like we can handle everything in each interrupt... additional testing   */
-/* will prove or disprove this theory...                                   */
+// Do nothing at this point
 void loop() {
-  /*
-    if(activeInterrupt == NOTHING) {
-    }
-    else {
-        cli();
-        if(activeInterrupt == _37ECWR || activeInterrupt == _37E8WR || activeInterrupt == _37E4WR || activeInterrupt == _37E0WR) {
-          L1_CYAN();
-          p("write - ");
-          if(activeInterrupt == _37ECWR) {
-            L2_RED();
-            p("Disk command register   - 0x37EC - %d %d %d\n",busvalue, a1, a0);
-          }
-          else
-          if(activeInterrupt == _37E8WR) {
-            L2_BLUE();
-            p("Line printer data port  - 0x37E8 - %d %d %d\n",busvalue, a1, a0);
-          }
-          else
-          if(activeInterrupt == _37E4WR) {
-            L2_YELLOW();
-            p("Cassette drive latch    - 0x37E4 - %d %d %d\n",busvalue, a1, a0);
-          }
-          else {
-            L2_VIOLET();
-            p("%d - %d %d %d\n",activeInterrupt, busvalue, a1, a0);
-          }
-        }
-        else {
-          //L1_VIOLET();
-          p("read  - ");
-          if(activeInterrupt == _37ECRD) {
-            L2_RED();
-            p("Disk status register    - 0x37EC %d %d\n", a1, a0);
-            setDataBus(0);
-          }
-          else
-          if(activeInterrupt == _37E8RD) {
-            L2_BLUE();
-            p("Line printer status port- 0x37E8 %d %d\n", a1, a0);
-            setDataBus(0);
-          }
-          else
-          if(activeInterrupt == _37E4RD) {
-            L2_YELLOW();
-            p("Cassette drive latch    - 0x37E4 %d %d\n", a1, a0);
-            setDataBus(0);
-          }
-          else {
-            //L2_VIOLET(); 
-            p("%d %d %d\n", activeInterrupt, a1, a0);
-            i++;
-            if(i>255) i=0;
-            setDataBus(i);           
-          }
-        
-        }
-
-        //L1_GREEN();
-        //L2_GREEN();
-        
-        activeInterrupt = NOTHING;
-        resetWaitLatch();
-        //p("sei invokation\n");
-        sei();  
-    }
-    */
 }
