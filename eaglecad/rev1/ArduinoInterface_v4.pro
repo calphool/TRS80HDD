@@ -2,24 +2,24 @@ EAGLE AutoRouter Statistics:
 
 Job           : /Users/jrounceville/TRS80HDD/eaglecad/rev1/ArduinoInterface_v4.brd
 
-Start at      : 00:01:47 (12/28/18)
-End at        : 00:02:16 (12/28/18)
-Elapsed time  : 00:00:04
+Start at      : 02:48:46 (1/5/19)
+End at        : 02:50:36 (1/5/19)
+Elapsed time  : 00:00:42
 
-Signals       :   123   RoutingGrid: 9.84252 mil  Layers: 2
-Connections   :   246   predefined:  244 ( 215 Vias )
+Signals       :   123   RoutingGrid: 4.92126 mil  Layers: 2
+Connections   :   245   predefined:  174 ( 156 Vias )
 
-Router memory :   734400
+Router memory :   2874960
 
 Passname          :     Route Optimize1 Optimize2 Optimize3 Optimize4
 
-Time per pass     :  00:00:00  00:00:01  00:00:01  00:00:01  00:00:01
-Number of Ripups  :         0         0         0         0         0
-max. Level        :         0         0         0         0         0
-max. Total        :         0         0         0         0         0
+Time per pass     :  00:00:08  00:00:09  00:00:07  00:00:09  00:00:09
+Number of Ripups  :        10         0         0         0         0
+max. Level        :         2         0         0         0         0
+max. Total        :         3         0         0         0         0
 
-Routed            :         2         2         2         2         2
-Vias              :         0         0         0         0         0
+Routed            :        71        71        71        71        71
+Vias              :        69        56        48        47        47
 Resolution        :   100.0 %   100.0 %   100.0 %   100.0 %   100.0 %
 
-Final             : 100.0% finished
+Final             : 93.9% finished. Polygons may have fallen apart.
