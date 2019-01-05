@@ -1,25 +1,25 @@
 EAGLE AutoRouter Statistics:
 
-Job           : /Users/jrounceville/TRS80HDD/eaglecad/rev1/ArduinoInterface_v3.brd
+Job           : /Users/jrounceville/Documents/eagle/TRS-80 Arduino Interface/ArduinoInterface_v3.brd
 
-Start at      : 22:31:12 (12/17/18)
-End at        : 22:31:38 (12/17/18)
-Elapsed time  : 00:00:05
+Start at      : 02:18:56 (10/30/18)
+End at        : 02:24:00 (10/30/18)
+Elapsed time  : 00:02:12
 
-Signals       :   122   RoutingGrid: 19.685 mil  Layers: 2
-Connections   :   245   predefined:  228 ( 182 Vias )
+Signals       :   122   RoutingGrid: 4.92126 mil  Layers: 2
+Connections   :   245   predefined:  90 ( 0 Vias )
 
-Router memory :   191540
+Router memory :   2964348
 
 Passname          :    Busses     Route Optimize1 Optimize2 Optimize3 Optimize4
 
-Time per pass     :  00:00:00  00:00:00  00:00:01  00:00:01  00:00:01  00:00:02
-Number of Ripups  :         0         0         0         0         0         0
-max. Level        :         0         0         0         0         0         0
-max. Total        :         0         0         0         0         0         0
+Time per pass     :  00:00:01  00:00:19  00:00:30  00:00:27  00:00:27  00:00:28
+Number of Ripups  :         0         9         0         0         0         0
+max. Level        :         0         1         0         0         0         0
+max. Total        :         0         3         0         0         0         0
 
-Routed            :         1        17        17        17        17        17
-Vias              :         0         0         0         0         0         0
-Resolution        :    93.5 %   100.0 %   100.0 %   100.0 %   100.0 %   100.0 %
+Routed            :        25       155       155       155       155       155
+Vias              :         0       374       213       162       140       138
+Resolution        :    46.9 %   100.0 %   100.0 %   100.0 %   100.0 %   100.0 %
 
-Final             : 99.6% finished. Polygons may have fallen apart.
+Final             : 94.7% finished. Polygons may have fallen apart.
