@@ -1,4 +1,4 @@
-//for use with TRSHDD board v3.0
+//for use with TRSHDD board v3.1
 
 #include <Metro.h>
 
@@ -10,62 +10,75 @@
 #include <sdios.h>
 #include <SysCall.h>
 #include <StringStream.h>
-
-
-
 #include <stdarg.h>
 
-#define L1_RED()    digitalWriteFast(21,HIGH);digitalWriteFast(22,LOW); digitalWriteFast(23,LOW);
-#define L1_GREEN()  digitalWriteFast(21,LOW); digitalWriteFast(22,LOW); digitalWriteFast(23,HIGH);
-#define L1_BLUE()   digitalWriteFast(21,LOW); digitalWriteFast(22,HIGH);digitalWriteFast(23,LOW);
-#define L1_YELLOW() digitalWriteFast(21,HIGH);digitalWriteFast(22,LOW); digitalWriteFast(23,HIGH);
-#define L1_CYAN()   digitalWriteFast(21,LOW); digitalWriteFast(22,HIGH);digitalWriteFast(23,HIGH);
-#define L1_VIOLET() digitalWriteFast(21,HIGH);digitalWriteFast(22,HIGH);digitalWriteFast(23,LOW);
-#define L1_WHITE()  digitalWriteFast(21,HIGH);digitalWriteFast(22,HIGH);digitalWriteFast(23,HIGH);
-#define L1_BLACK()  digitalWriteFast(21,LOW); digitalWriteFast(22,LOW); digitalWriteFast(23,LOW);
 
-#define L2_RED()    digitalWriteFast(18,HIGH);digitalWriteFast(19,LOW); digitalWriteFast(20,LOW);
-#define L2_BLUE()   digitalWriteFast(18,LOW); digitalWriteFast(19,HIGH);digitalWriteFast(20,LOW);
-#define L2_GREEN()  digitalWriteFast(18,LOW); digitalWriteFast(19,LOW); digitalWriteFast(20,HIGH);
-#define L2_CYAN()   digitalWriteFast(18,LOW); digitalWriteFast(19,HIGH);digitalWriteFast(20,HIGH);
-#define L2_VIOLET() digitalWriteFast(18,HIGH);digitalWriteFast(19,HIGH);digitalWriteFast(20,LOW);
-#define L2_YELLOW() digitalWriteFast(18,HIGH);digitalWriteFast(19,LOW); digitalWriteFast(20,HIGH);
-#define L2_WHITE()  digitalWriteFast(18,HIGH);digitalWriteFast(19,HIGH);digitalWriteFast(20,HIGH);
-#define L2_BLACK()  digitalWriteFast(18,LOW); digitalWriteFast(19,LOW); digitalWriteFast(20,LOW);
+#define L1_RED()    digitalWriteFast(5,HIGH);digitalWriteFast(7,LOW); digitalWriteFast(6,LOW);
+#define L1_GREEN()  digitalWriteFast(5,LOW); digitalWriteFast(7,LOW); digitalWriteFast(6,HIGH);
+#define L1_BLUE()   digitalWriteFast(5,LOW); digitalWriteFast(7,HIGH);digitalWriteFast(6,LOW);
+#define L1_YELLOW() digitalWriteFast(5,HIGH);digitalWriteFast(7,LOW); digitalWriteFast(6,HIGH);
+#define L1_CYAN()   digitalWriteFast(5,LOW); digitalWriteFast(7,HIGH);digitalWriteFast(6,HIGH);
+#define L1_VIOLET() digitalWriteFast(5,HIGH);digitalWriteFast(7,HIGH);digitalWriteFast(6,LOW);
+#define L1_WHITE()  digitalWriteFast(5,HIGH);digitalWriteFast(7,HIGH);digitalWriteFast(6,HIGH);
+#define L1_BLACK()  digitalWriteFast(5,LOW); digitalWriteFast(7,LOW); digitalWriteFast(6,LOW);
 
-#define A1 37
-#define A0 36
-#define INTERUPT_TO_TRS80 35
-#define _37ECWR 34
-#define _37E8WR 33
-#define FF_PRE 29
-#define _37E4WR 28
-#define _37E0WR 27
-#define _37ECRD 26
-#define FF_CLR 25
-#define _37E8RD 12
-#define _37E4RD 11
-#define _37E0RD 10
-#define D7 9
-#define D6 8
-#define D5 7
-#define D4 6
-#define D3 5
-#define D2 4
-#define D1 3
-#define D0 2
+#define L2_RED()    digitalWriteFast(2,HIGH);digitalWriteFast(4,LOW); digitalWriteFast(3,LOW);
+#define L2_BLUE()   digitalWriteFast(2,LOW); digitalWriteFast(4,HIGH);digitalWriteFast(3,LOW);
+#define L2_GREEN()  digitalWriteFast(2,LOW); digitalWriteFast(4,LOW); digitalWriteFast(3,HIGH);
+#define L2_CYAN()   digitalWriteFast(2,LOW); digitalWriteFast(4,HIGH);digitalWriteFast(3,HIGH);
+#define L2_VIOLET() digitalWriteFast(2,HIGH);digitalWriteFast(4,HIGH);digitalWriteFast(3,LOW);
+#define L2_YELLOW() digitalWriteFast(2,HIGH);digitalWriteFast(4,LOW); digitalWriteFast(3,HIGH);
+#define L2_WHITE()  digitalWriteFast(2,HIGH);digitalWriteFast(4,HIGH);digitalWriteFast(3,HIGH);
+#define L2_BLACK()  digitalWriteFast(2,LOW); digitalWriteFast(4,LOW); digitalWriteFast(3,LOW);
+
+
+//                        0 - disconnected
+//                        1 - disconnected
+#define LED2_RED          2
+#define LED2_GREEN        3
+#define LED2_BLUE         4
+#define LED1_RED          5
+#define LED1_GREEN        6
+#define LED1_BLUE         7
+
+#define INTERUPT_TO_TRS80 8
+
+#define D3                9
+#define D4               10
+#define D6               11
+#define D7               12
+#define D5               13
+//                       14 - disconnected
+#define D0               15
+//                       16 - disconnected
+//                       17 - disconnected
+//                       18 - disconnected
+//                       19 - disconnected
+//                       20 - disconnected
+//                       21 - disconnected
+#define D1               22
+#define D2               23
+//                       24 - disconnected
+#define FF_CLR           25
+#define _37ECRD          26
+#define _37E0WR          27
+#define _37E4WR          28
+#define FF_PRE           29
+#define _37E8RD          30
+#define _37E0RD          31
+#define _37E4RD          32
+#define _37E8WR          33
+#define _37ECWR          34
+#define _A0              35
+#define _A1              36
+#define NOTHING1         37
+#define NOTHING2         38
+#define NOTHING3         39
+
 #define NOTHING 0
 
 #define IN 0
 #define OUT 1
-
-
-volatile int activeInterrupt = NOTHING;
-volatile int a0;
-volatile int a1;
-volatile int port_a;
-volatile int port_c;
-volatile int port_d;
 
 volatile int currentDrive = 0xff;
 volatile int trackNum = 0;
@@ -73,8 +86,14 @@ volatile int sectorNum = 0;
 volatile byte dataRegister = 0;
 volatile byte commandRegister = 0;
 volatile int byteCtr;
+volatile int dataBusDirection = -1;
 
-volatile byte interruptStatus = 0x80;
+volatile int interruptStatus;
+volatile int a0;
+volatile int a1;
+
+#define CMD_NONE 0
+
 
 typedef unsigned int boolean_t;
 #define FALSE 0
@@ -118,13 +137,11 @@ volatile statusRegisterDef statusRegister;
 volatile int iIndexHole = 1;
 volatile int iTrackDirection = IN;
 
-
 volatile int iBusDirection = 2;
 volatile byte b = 0;
 volatile int busvalue;
 volatile byte currentCommand = 0;
-#define CMD_NONE 0
-#define CMD_READADDRESS 1
+
 
 String strmOutput;
 String disk1FileName = "NEWDOS_80sssd_jv1.DSK";
@@ -132,17 +149,13 @@ String disk1FileName = "NEWDOS_80sssd_jv1.DSK";
 
 SdFatSdioEX sdEx;
 File file;
-
 File disk1File;
-
 File diskImage1;
-
 
 
 /* printf() to serial output */
 void p(char *fmt, ... ){
-    char buf[80];
-        
+    char buf[80];        
     va_list args;
     va_start (args, fmt );
     vsnprintf(buf, 128, fmt, args);
@@ -152,85 +165,52 @@ void p(char *fmt, ... ){
 }
 
 
-/* direct data bus pins outward */
-inline void dataOutMode() {
-  if(iBusDirection == OUT)
-     return;
-  iBusDirection = OUT;
-
-/*
-  pinMode(D7,OUTPUT);
-  pinMode(D6,OUTPUT);
-  pinMode(D5,OUTPUT);
-  pinMode(D4,OUTPUT);
-  pinMode(D3,OUTPUT);
-  pinMode(D2,OUTPUT);
-  pinMode(D1,OUTPUT);
-  pinMode(D0,OUTPUT);
-*/
-
-  GPIOA_PDDR = 143392;
-  GPIOC_PDDR = 2318;
-  GPIOD_PDDR = 253;
-}
-
-
-/* direct data bus pins inward */
-inline void dataInMode() {
-  if(iBusDirection == IN)
+inline void dataBusOutFromTeensyMode() {
+  if(dataBusDirection == OUT)
       return;
-  iBusDirection = IN;
-  /*
-  pinMode(D7,INPUT);
-  pinMode(D6,INPUT);
-  pinMode(D5,INPUT);
-  pinMode(D4,INPUT);
-  pinMode(D3,INPUT);
-  pinMode(D2,INPUT);
-  pinMode(D1,INPUT);
-  pinMode(D0,INPUT);
-  */
-  GPIOA_PDDR = 131104;
-  GPIOC_PDDR = 2310;
-  GPIOD_PDDR = 96;    
+      
+  dataBusDirection = OUT;  
+  GPIOC_PDDR = GPIOC_PDDR | 0x00ff;
 }
+
+
+inline void dataBusInToTeensyMode() {
+  if(dataBusDirection == IN)
+    return;
+
+  dataBusDirection = IN;
+  GPIOC_PDDR = GPIOC_PDDR & 0xff00;
+}
+
 
 
 /* set up pin directionality */
 void pinSetup() {
-  pinMode(18,OUTPUT);                 // L2 LEDs (leg pins may be rearranged depending on what RGB LED used -- just change the macro names around)
-  pinMode(19,OUTPUT);                 // L2 LEDs
-  pinMode(20,OUTPUT);                 // L2 LEDs
-  pinMode(21,OUTPUT);                 // L1 LEDs
-  pinMode(22,OUTPUT);                 // L1 LEDs
-  pinMode(23,OUTPUT);                 // L1 LEDs
-  pinMode(39,OUTPUT);                 // nothing, unused pin
-  pinMode(38,OUTPUT);                 // nothing, unused pin
-  pinMode(A1, INPUT);          // A1 from TRS-80
-  pinMode(A0, INPUT);          // A0 from TRS-80
-  pinMode(INTERUPT_TO_TRS80, OUTPUT); // pin to trigger interrupts on the TRS-80
-  pinMode(_37ECWR, INPUT);            // pin to detect when write to address 37EC has been triggered (low)
-  pinMode(_37E8WR, INPUT);            // pin to detect when write to address 37E8 has been triggered (low)
-  pinMode(30,OUTPUT);                 // nothing, unused pin
-  pinMode(FF_PRE,OUTPUT);             // flip flop PRE 
-  pinMode(_37E4WR,INPUT);             // pin to detect when write to address 37E4 has been triggered (low)
-  pinMode(_37E0WR,INPUT);             // pin to detect when write to address 37E0 has been triggered (low)
-  pinMode(_37ECRD,INPUT);             // pin to detect when read from address 37E0 has been triggered (low)
-  pinMode(FF_CLR,OUTPUT);             // flip flop CLR 
-  pinMode(_37E8RD,INPUT);             // pin to detect when read from address 37E8 has been triggered (low)
-  pinMode(_37E4RD,INPUT);             // pin to detect when read from address ﻿37E4 has been triggered (low)
-  pinMode(_37E0RD,INPUT);             // pin to detect when read from address 37E0 has been triggered (low)
-
-  pinMode(D7,INPUT);
-  pinMode(D6,INPUT);
-  pinMode(D5,INPUT);
-  pinMode(D4,INPUT);
-  pinMode(D3,INPUT);
-  pinMode(D2,INPUT);
-  pinMode(D1,INPUT);
-  pinMode(D0,INPUT);
-  iBusDirection = IN;
+  pinMode(LED1_RED, OUTPUT);
+  pinMode(LED1_GREEN, OUTPUT);
+  pinMode(LED1_BLUE, OUTPUT);
+  pinMode(LED2_RED, OUTPUT);
+  pinMode(LED2_GREEN, OUTPUT);
+  pinMode(LED2_BLUE, OUTPUT);
+  pinMode(INTERUPT_TO_TRS80, OUTPUT);
+  pinMode(FF_CLR, OUTPUT);
+  pinMode(FF_PRE, OUTPUT);
+  pinMode(_37E0RD, INPUT);
+  pinMode(_37E0WR, INPUT);
+  pinMode(_37E4RD, INPUT);
+  pinMode(_37E4WR, INPUT);
+  pinMode(_37E8RD, INPUT);
+  pinMode(_37E8WR, INPUT);
+  pinMode(_37ECRD, INPUT);
+  pinMode(_37ECWR, INPUT);
+  pinMode(_A0, INPUT);
+  pinMode(_A1, INPUT);
+  pinMode(NOTHING1, OUTPUT);
+  pinMode(NOTHING2, OUTPUT);
+  pinMode(NOTHING3, OUTPUT);
+  dataBusInToTeensyMode();
 }
+
 
 
 /* jigger the flip flop that's tied to the WAIT* line on the TRS-80 to make sure it's in a known state */
@@ -284,22 +264,9 @@ signed char i=ZeroPadding;
 }
 
 
-inline int convertBusValue() {
-  dataInMode();
-  port_a = GPIOA_PDIR;
-  port_c = GPIOC_PDIR;
-  port_d = GPIOD_PDIR;
-  
-  unsigned int bv = (port_d & 0x0001); //D0, pin 2
-  bv = bv + ((port_a & 0x1000) >> 11); //D1, pin 3
-  bv = bv + ((port_a & 0x2000) >> 11); //D2, pin 4
-  bv = bv + ((port_d & 0x0080) >> 4);  //D3, pin 5
-  bv = bv + ((port_d & 0x0010));       //D4, pin 6
-  bv = bv + ((port_d & 0x0004) << 3);  //D5, pin 7
-  bv = bv + ((port_d & 0x0008) << 3);  //D6, pin 8
-  bv = bv + ((port_c & 0x0008) << 4);  //D7, pin 9
-  
-  return bv;
+inline int getDataBusValue() {
+  dataBusInToTeensyMode();
+  return (GPIOC_PDIR & 0x00ff);
 }
 
 void displayAddress(unsigned int address) {
@@ -560,30 +527,30 @@ byte PeekFromTRS80(unsigned int address) {
 }
 
 
-#define GET_LOW_ADDRESSES()   a0 = digitalReadFast(A0); a1 = digitalReadFast(A1);
+#define GET_LOW_ADDRESSES()   a0 = digitalReadFast(_A0); a1 = digitalReadFast(_A1);
 void _37E0WRInterrupt() {
-  busvalue = convertBusValue();
+  busvalue = getDataBusValue();
   GET_LOW_ADDRESSES()
   PokeFromTRS80(0x37e0 + (a1<<1) + a0, busvalue); 
   resetWaitLatch();    
 }
 
 void _37E8WRInterrupt() {
-  busvalue = convertBusValue();
+  busvalue = getDataBusValue();
   GET_LOW_ADDRESSES()
   PokeFromTRS80(0x37e8 + (a1<<1) + a0, busvalue); 
   resetWaitLatch();
 } 
 
 void _37E4WRInterrupt() {
-  busvalue = convertBusValue();
+  busvalue = getDataBusValue();
   GET_LOW_ADDRESSES() 
   PokeFromTRS80(0x37e4 + (a1<<1) + a0, busvalue); 
   resetWaitLatch();
 }
 
 void _37ECWRInterrupt() {
-  busvalue = convertBusValue();
+  busvalue = getDataBusValue();
   GET_LOW_ADDRESSES()
   PokeFromTRS80(0x37ec + (a1<<1) + a0, busvalue); 
   resetWaitLatch();
@@ -618,16 +585,8 @@ void _37E0RDInterrupt() {
 
 /* set the value of the data bus */
 inline void setDataBus(int b) {
-  int x = b;
-  dataOutMode();
-  if(x >= 128) {digitalWriteFast(D7,HIGH); x-=128;} else {digitalWriteFast(D7,LOW);}
-  if(x >= 64)  {digitalWriteFast(D6,HIGH); x-=64; } else {digitalWriteFast(D6,LOW);}
-  if(x >= 32)  {digitalWriteFast(D5,HIGH); x-=32; } else {digitalWriteFast(D5,LOW);}
-  if(x >= 16)  {digitalWriteFast(D4,HIGH); x-=16; } else {digitalWriteFast(D4,LOW);}
-  if(x >= 8)   {digitalWriteFast(D3,HIGH); x-=8;  } else {digitalWriteFast(D3,LOW);}
-  if(x >= 4)   {digitalWriteFast(D2,HIGH); x-=4;  } else {digitalWriteFast(D2,LOW);}
-  if(x >= 2)   {digitalWriteFast(D1,HIGH); x-=2;  } else {digitalWriteFast(D1,LOW);}
-  if(x >= 1)   {digitalWriteFast(D0,HIGH);        } else {digitalWriteFast(D0,LOW);}
+  dataBusOutFromTeensyMode();
+  GPIOC_PDIR = (GPIOC_PDIR & 0xff00) & b;
 }
 
 
@@ -656,26 +615,37 @@ void setup() {
 
   L1_RED();
   L2_RED();
-  while(!Serial && i < 10) {
+  while(!Serial && i < 30) {
     i++;
     delay(100);
     L2_YELLOW();
     delay(100);
     L2_RED();
   }
-  L2_GREEN();
+
+  if(!Serial) {
+    L2_RED();
+    L1_RED();
+    return;
+  }
+
+  
+  L2_CYAN();
+  L1_YELLOW();
   configureInterrupts(); // tie interrupt lines to code blocks
-  L1_GREEN();  
 
   p("F_CPU: %d\n", F_CPU);
   p("F_BUS: %d\n", F_BUS);
 
-  convertBusValue();
+  getDataBusValue();
   
   StringStream stream(strmOutput);
   
   if (!sdEx.begin()) {
       sdEx.initErrorHalt("SdFatSdioEX begin() failed");
+      L2_RED();
+      L1_RED();
+      return;
   }
   sdEx.chvol();
 
@@ -706,15 +676,15 @@ void setup() {
   }
   p("\nReady.\n");
   setStatusRegisterToNormalType1Response();
+  L2_GREEN();
+  L1_GREEN();
   sei();
-  //disk1File.close();
 }
 
 
 Metro trs80ClockPulse = Metro(25);
 
 void loop() {
-  /*
     if(trs80ClockPulse.check() == 1) { // invoke clock interrupt every 25ms
        cli();
        interruptStatus = 0x80;
@@ -728,5 +698,4 @@ void loop() {
        }
        sei();
     }
-    */
 }
