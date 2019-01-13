@@ -1,5 +1,6 @@
+
 <---: 0x37EC  <--- (0x84) <::status reg::>
-:---> (0x00)  ---> 0x37E1  <::drive select::> 
+:---> (0x00)  ---> 0x37E1 <::drive select::> 
  ??Received nonsense value for drive number, assuming 0??
 :---> (0x03)  ---> 0x37EC <::command reg::> 
     RESTORE CMD
@@ -9,515 +10,515 @@
     READ SECTOR CMD
 <---: 0x37EC  <--- (0x07) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#255 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFE) <::data reg:: [#254 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x11) <::data reg:: [#253 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xF3) <::data reg:: [#252 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x21) <::data reg:: [#251 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEC) <::data reg:: [#250 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x37) <::data reg:: [#249 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#248 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFE) <::data reg:: [#247 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#246 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD0) <::data reg:: [#245 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x23) <::data reg:: [#244 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#243 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#242 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x23) <::data reg:: [#241 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#240 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#239 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x11) <::data reg:: [#238 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x05) <::data reg:: [#237 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#236 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD9) <::data reg:: [#235 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x31) <::data reg:: [#234 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE0) <::data reg:: [#233 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x41) <::data reg:: [#232 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x21) <::data reg:: [#231 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFF) <::data reg:: [#230 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x51) <::data reg:: [#229 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#228 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#227 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#226 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFE) <::data reg:: [#225 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#224 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x47) <::data reg:: [#223 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x30) <::data reg:: [#222 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x29) <::data reg:: [#221 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x57) <::data reg:: [#220 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#219 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#218 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#217 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4F) <::data reg:: [#216 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#215 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#214 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#213 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x5F) <::data reg:: [#212 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x10) <::data reg:: [#211 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x12) <::data reg:: [#210 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#209 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#208 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#207 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x57) <::data reg:: [#206 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0D) <::data reg:: [#205 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0D) <::data reg:: [#204 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x2C) <::data reg:: [#203 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCC) <::data reg:: [#202 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x55) <::data reg:: [#201 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#200 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#199 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x12) <::data reg:: [#198 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x13) <::data reg:: [#197 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0D) <::data reg:: [#196 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#195 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xF6) <::data reg:: [#194 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x18) <::data reg:: [#193 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xDB) <::data reg:: [#192 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x10) <::data reg:: [#191 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xF9) <::data reg:: [#190 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#189 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#188 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#187 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x57) <::data reg:: [#186 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1A) <::data reg:: [#185 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFE) <::data reg:: [#184 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xA5) <::data reg:: [#183 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x13) <::data reg:: [#182 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD5) <::data reg:: [#181 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC8) <::data reg:: [#180 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x21) <::data reg:: [#179 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE5) <::data reg:: [#178 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#177 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC3) <::data reg:: [#176 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC3) <::data reg:: [#175 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#174 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x2C) <::data reg:: [#173 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#172 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC0) <::data reg:: [#171 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD9) <::data reg:: [#170 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x06) <::data reg:: [#169 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0A) <::data reg:: [#168 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x21) <::data reg:: [#167 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE1) <::data reg:: [#166 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x37) <::data reg:: [#165 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#164 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x01) <::data reg:: [#163 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD5) <::data reg:: [#162 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC5) <::data reg:: [#161 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7B) <::data reg:: [#160 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD6) <::data reg:: [#159 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0A) <::data reg:: [#158 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x38) <::data reg:: [#157 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x03) <::data reg:: [#156 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x5F) <::data reg:: [#155 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#154 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x09) <::data reg:: [#153 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x21) <::data reg:: [#152 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEC) <::data reg:: [#151 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x37) <::data reg:: [#150 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#149 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCE) <::data reg:: [#148 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#147 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xED) <::data reg:: [#146 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x53) <::data reg:: [#145 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEE) <::data reg:: [#144 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x37) <::data reg:: [#143 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#142 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1B) <::data reg:: [#141 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#140 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCE) <::data reg:: [#139 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#138 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#137 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x88) <::data reg:: [#136 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x11) <::data reg:: [#135 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEF) <::data reg:: [#134 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x37) <::data reg:: [#133 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x01) <::data reg:: [#132 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#131 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x51) <::data reg:: [#130 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#129 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD7) <::data reg:: [#128 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#127 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#126 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE6) <::data reg:: [#125 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x83) <::data reg:: [#124 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE2) <::data reg:: [#123 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x81) <::data reg:: [#122 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#121 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1A) <::data reg:: [#120 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x02) <::data reg:: [#119 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x03) <::data reg:: [#118 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#117 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4E) <::data reg:: [#116 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC2) <::data reg:: [#115 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x87) <::data reg:: [#114 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#113 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#112 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4E) <::data reg:: [#111 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC2) <::data reg:: [#110 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x87) <::data reg:: [#109 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#108 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#107 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4E) <::data reg:: [#106 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#105 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEF) <::data reg:: [#104 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#103 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x46) <::data reg:: [#102 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x28) <::data reg:: [#101 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x08) <::data reg:: [#100 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#99 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4E) <::data reg:: [#98 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#97 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE7) <::data reg:: [#96 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#95 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#94 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x28) <::data reg:: [#93 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE6) <::data reg:: [#92 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#91 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#90 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD0) <::data reg:: [#89 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC1) <::data reg:: [#88 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD1) <::data reg:: [#87 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xE6) <::data reg:: [#86 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFC) <::data reg:: [#85 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#84 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0C) <::data reg:: [#83 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1C) <::data reg:: [#82 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7B) <::data reg:: [#81 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD6) <::data reg:: [#80 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0A) <::data reg:: [#79 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#78 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x03) <::data reg:: [#77 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x14) <::data reg:: [#76 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1E) <::data reg:: [#75 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#74 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD9) <::data reg:: [#73 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#72 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC9) <::data reg:: [#71 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#70 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD7) <::data reg:: [#69 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#68 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x36) <::data reg:: [#67 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x0B) <::data reg:: [#66 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x10) <::data reg:: [#65 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x98) <::data reg:: [#64 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x21) <::data reg:: [#63 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xDD) <::data reg:: [#62 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#61 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#60 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFE) <::data reg:: [#59 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x03) <::data reg:: [#58 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x28) <::data reg:: [#57 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFB) <::data reg:: [#56 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x23) <::data reg:: [#55 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#54 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x33) <::data reg:: [#53 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#52 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x18) <::data reg:: [#51 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xF5) <::data reg:: [#50 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCD) <::data reg:: [#49 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD7) <::data reg:: [#48 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x42) <::data reg:: [#47 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xCB) <::data reg:: [#46 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x46) <::data reg:: [#45 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#44 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFC) <::data reg:: [#43 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x7E) <::data reg:: [#42 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC9) <::data reg:: [#41 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x3E) <::data reg:: [#40 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x06) <::data reg:: [#39 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x3D) <::data reg:: [#38 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#37 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xFD) <::data reg:: [#36 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xC9) <::data reg:: [#35 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1C) <::data reg:: [#34 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1F) <::data reg:: [#33 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x45) <::data reg:: [#32 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#31 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#30 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4F) <::data reg:: [#29 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x52) <::data reg:: [#28 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x03) <::data reg:: [#27 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1C) <::data reg:: [#26 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x1F) <::data reg:: [#25 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4E) <::data reg:: [#24 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x4F) <::data reg:: [#23 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x20) <::data reg:: [#22 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x53) <::data reg:: [#21 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x59) <::data reg:: [#20 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x53) <::data reg:: [#19 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x03) <::data reg:: [#18 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEA) <::data reg:: [#17 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x45) <::data reg:: [#16 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x2C) <::data reg:: [#15 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x55) <::data reg:: [#14 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x6A) <::data reg:: [#13 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xA4) <::data reg:: [#12 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x22) <::data reg:: [#11 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xB2) <::data reg:: [#10 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xB4) <::data reg:: [#9 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xB6) <::data reg:: [#8 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x64) <::data reg:: [#7 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xD6) <::data reg:: [#6 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xEC) <::data reg:: [#5 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x98) <::data reg:: [#4 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0xF4) <::data reg:: [#3 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#2 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x13) <::data reg:: [#1 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
+<---: 0x37EC  <--- (0x03) <::status reg::>
 <---: 0x37EF  <--- (0x00) <::data reg:: [#0 - busy]> 
 :---> (0xFE)  ---> 0x37EC <::command reg::> 
     -Unknown command: fe
@@ -525,9 +526,9 @@
     FORCE INTERRUPT
 :---> (0x00)  ---> 0x37ED <::track reg::> 
 :---> (0x00)  ---> 0x37EE <::sector reg::> 
-:---> (0x01)  ---> 0x37E1  <::drive select::> 
-<---: 0x37EC  <--- (0x06) <::status reg::>
-<---: 0x37EC  <--- (0x06) <::status reg::>
+:---> (0x01)  ---> 0x37E1 <::drive select::> 
+<---: 0x37EC  <--- (0x24) <::status reg::>
+<---: 0x37EC  <--- (0x24) <::status reg::>
 :---> (0x05)  ---> 0x37EE <::sector reg::> 
 :---> (0xFF)  ---> 0x37EE <::sector reg::> 
 :---> (0xFF)  ---> 0x37EC <::command reg::> 
@@ -536,31 +537,3 @@
 <---: 0x37EC  <--- (0x06) <::status reg::>
 :---> (0x88)  ---> 0x37EC <::command reg::> 
     READ SECTOR CMD
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x01) <::data reg:: [#255 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#254 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0xE4) <::data reg:: [#253 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x55) <::data reg:: [#252 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#251 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#250 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#249 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#248 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#247 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#246 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#245 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#244 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#243 - busy]> 
-<---: 0x37EC  <--- (0x07) <::status reg::>
-<---: 0x37EF  <--- (0x00) <::data reg:: [#242 - busy]> 

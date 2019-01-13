@@ -366,7 +366,7 @@ void PokeFromTRS80(unsigned int address, int byt) {
   iIndexHole = -iIndexHole;
   
   if((address & 0xfffc) == 0x37e0) { // drive select
-    p(" <::drive select::> \n");
+    p("<::drive select::> \n");
     if(byt == 1)
       currentDrive = 0;
     else if(byt == 2)
@@ -379,7 +379,7 @@ void PokeFromTRS80(unsigned int address, int byt) {
       p(" ??Received nonsense value for drive number, assuming 0??\n");
       currentDrive = 0;
     }
-    statusRegister = INDEXHOLE;
+    statusRegister = HEADENGAGED;
     if(trackNum == 0)
         statusRegister |= TRACKZERO;
     return;
@@ -442,13 +442,9 @@ byte PeekFromTRS80(unsigned int address) {
 
      if(byteCtr > 0) {
         statusRegister = INDEXHOLE | BUSY;
-        if(trackNum == 0)
-            statusRegister |= TRACKZERO;
      }
      else
         statusRegister = INDEXHOLE;
-        if(trackNum == 0)
-            statusRegister |= TRACKZERO;
     }
     else {
       p(" <--- (0x%02X) <::data reg:: - not busy> \n", dataRegister);
