@@ -83,7 +83,8 @@ volatile int trackNum = 0;
 volatile int sectorNum = 0;
 volatile int dataRegister = 0;
 volatile int commandRegister = 0;
-volatile int byteCtr;
+volatile int byteCtr = 0;
+volatile int busyCtr = 0;
 volatile int dataBusDirection = -1;
 
 
@@ -110,11 +111,13 @@ volatile int dataBusDirection = -1;
 #define WRITEFAULT 0x20
 
 
-volatile unsigned char statusRegister;
+volatile int statusRegister;
 
 volatile int iIndexHole = 1;
 volatile int iTrackDirection = IN;
 volatile int iBusDirection = 2;
+volatile int dataBus;
+volatile int address;
 
 String disk1FileName = "NEWDOS_80sssd_jv1.DSK";
 File disk1File;
@@ -123,8 +126,7 @@ SdFatSdioEX sdEx;
 
 /* printf() to serial output */
 void p(char *fmt, ... ){
-//  return;
-    char buf[80];        
+    char buf[128];        
     va_list args;
     va_start (args, fmt );
     vsnprintf(buf, 128, fmt, args);
@@ -251,6 +253,8 @@ inline int getDataBusValue() {
 inline void invokeTRS80Interrupt(int type) {
   setDataBus(type);
   digitalWriteFast(INTERUPT_TO_TRS80, LOW);
+  delayMicroseconds(1);
+  digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
 }
 
 void invokeCommand() {
@@ -279,10 +283,9 @@ void invokeCommand() {
   else if((commandRegister & 0xf0) == 0x10) {         // seek command
     p("    SEEK CMD\n");
     trackNum = dataRegister;
-    disk1File.seek(trackNum * 2560);
+    disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = HEADENGAGED;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
+    busyCtr = 77;
     invokeTRS80Interrupt(DISK);  
   }
   else if((commandRegister & 0xe0) == 0x20) {         // step command
@@ -296,11 +299,8 @@ void invokeCommand() {
         trackNum++;
       }
     }
-    disk1File.seek(trackNum*2560);
-    statusRegister = INDEXHOLE;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
-    
+    disk1File.seek(trackNum * 2560 + sectorNum * 256);
+    statusRegister = INDEXHOLE;    
     invokeTRS80Interrupt(DISK);
   }
   else if((commandRegister & 0xe0) == 0x40) {        // step in command
@@ -309,10 +309,8 @@ void invokeCommand() {
       trackNum++;
     }
     iTrackDirection = IN; // IN is away from 0
-    disk1File.seek(trackNum*2560);
+    disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
     invokeTRS80Interrupt(DISK);
   }
   else if((commandRegister & 0xe0) == 0x60) {        // step out command
@@ -322,20 +320,16 @@ void invokeCommand() {
          trackNum--;
     }
     iTrackDirection = OUT;                         // OUT is toward 0
-    disk1File.seek(trackNum*2560);
+    disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
     invokeTRS80Interrupt(DISK);
   }
   else if((commandRegister & 0xe0) == 0x80) {        // read command
     byteCtr = 256;
+    busyCtr = 259;
     p("    READ SECTOR CMD\n");
-    statusRegister = INDEXHOLE | BUSY;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
-
-     invokeTRS80Interrupt(DISK);
+    statusRegister = BUSY;
+    invokeTRS80Interrupt(DISK);
   }
   else if((commandRegister & 0xe0) == 0x90) {        // write command
      p("    WRITE CMD (unimpl)\n");    
@@ -356,98 +350,95 @@ void invokeCommand() {
         statusRegister |= TRACKZERO;    
   }
   else {
-    p("    -Unknown command: %x\n", commandRegister);
+    p("    UNKNOWN COMMAND\n");
   }
 }
 
 
-void PokeFromTRS80(unsigned int address, int byt) {
-  p(":---> (0x%02X)  ---> 0x%04X ",byt, address);  
-  iIndexHole = -iIndexHole;
+void PokeFromTRS80() {
+  p(":---> (0x%02X)  ---> 0x%04X ",dataBus, address);  
+  //p("\n");return;
   
   if((address & 0xfffc) == 0x37e0) { // drive select
     p("<::drive select::> \n");
-    if(byt == 1)
+    if(dataBus == 1)
       currentDrive = 0;
-    else if(byt == 2)
+    else if(dataBus == 2)
       currentDrive = 1;
-    else if(byt == 4)
+    else if(dataBus == 4)
       currentDrive = 2;
-    else if(byt == 8)
+    else if(dataBus == 8)
       currentDrive = 3;
     else {
       p(" ??Received nonsense value for drive number, assuming 0??\n");
       currentDrive = 0;
     }
     statusRegister = HEADENGAGED;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
     return;
   } 
   else
   if(address == 0x37ec) { // command invokation request
     p("<::command reg::> \n");
-    commandRegister = byt;
+    commandRegister = dataBus;
     invokeCommand();
     return;
   }
   else
   if(address == 0x37ed) {
     p("<::track reg::> \n");
-    trackNum = byt;  // track
-    disk1File.seek(trackNum * 2560);
+    trackNum = dataBus;  // track
+    disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
     return;
   }
   else
   if(address == 0x37ee) {
     p("<::sector reg::> \n");
-    sectorNum = byt; // sector
+    sectorNum = dataBus; // sector
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
     return;
   }
   else
   if(address == 0x37ef) {
     p("<::data reg::> \n");
-    dataRegister = byt;  // data byte
+    dataRegister = dataBus;  // data byte
     statusRegister = INDEXHOLE;
-    if(trackNum == 0)
-        statusRegister |= TRACKZERO;
     return;
   }
 
   p("Unhandled POKE!\n\n");
 }
 
-byte PeekFromTRS80(unsigned int address) {
+int PeekFromTRS80() {
   p("<---: 0x%04X ",address); 
-  iIndexHole = -iIndexHole;
-  
+
   if(address == 0x37ec) {             // read status register
     p(" <--- (0x%02X) <::status reg::>\n",statusRegister);
+    if(busyCtr > 0) {
+      busyCtr--;
+    }
+    else {
+      statusRegister &= ~(BUSY);        
+    }
+    if(byteCtr > 0) {
+       statusRegister |= DRQ;      
+    }
+        
     return statusRegister;
     //return 0;                       // return a zero if you want to boot without drives
   }
 
   if(address == 0x37ef) {             // read data register
-    if((statusRegister & BUSY) == 0x01) {
-     byteCtr--;
-     dataRegister = disk1File.read();
-     p(" <--- (0x%02X) <::data reg:: [#%d - busy]> \n", dataRegister, byteCtr);
-
-     if(byteCtr > 0) {
-        statusRegister = INDEXHOLE | BUSY;
-     }
-     else
-        statusRegister = INDEXHOLE;
+    if(byteCtr > 0) {
+       byteCtr--;
+       if(byteCtr == 0) busyCtr = 3;
+       dataRegister = disk1File.read();
+       p(" <--- (0x%02X) <::data reg::> \n", dataRegister);
     }
     else {
-      p(" <--- (0x%02X) <::data reg:: - not busy> \n", dataRegister);
+      statusRegister &= ~(DRQ);
+      p(" <--- (0x%02X) <::data reg::> \n", dataRegister);
     }
     return dataRegister;
   }
@@ -463,8 +454,8 @@ byte PeekFromTRS80(unsigned int address) {
   }  
 
   if(address == 0x37e0) {             // read interrupt latch (supposed to reset the latch)
-    p(" <--- (0x00) <::interupt latch::>\n");
-    return 0x00;
+    p(" <--- (0x80) <::interupt latch::>\n");
+    return 0x80;
   }
 
   p(" <--- (0xfe) <::HUH Why Am I Here?::>\n");
@@ -473,43 +464,55 @@ byte PeekFromTRS80(unsigned int address) {
 
 
 void _37E0WRInterrupt() {
-  PokeFromTRS80(0x37e0 + (GPIOC_PDIR>>8), getDataBusValue()); 
+  dataBus = getDataBusValue();
+  address = 0x37e0 + (GPIOC_PDIR>>8);
+  PokeFromTRS80(); 
   resetWaitLatch();    
 }
 
 void _37E8WRInterrupt() {
-  PokeFromTRS80(0x37e8 + (GPIOC_PDIR>>8), getDataBusValue()); 
+  dataBus = getDataBusValue();
+  address = 0x37e8 + (GPIOC_PDIR>>8);
+  PokeFromTRS80(); 
   resetWaitLatch();
 } 
 
 void _37E4WRInterrupt() {
-  PokeFromTRS80(0x37e4 + (GPIOC_PDIR>>8), getDataBusValue()); 
+  dataBus = getDataBusValue();
+  address = 0x37e4 + (GPIOC_PDIR>>8);
+  PokeFromTRS80(); 
   resetWaitLatch();
 }
 
 void _37ECWRInterrupt() {
-  PokeFromTRS80(0x37ec + (GPIOC_PDIR>>8), getDataBusValue()); 
+  dataBus = getDataBusValue();
+  address = 0x37ec + (GPIOC_PDIR>>8);
+  PokeFromTRS80(); 
   resetWaitLatch();
 }
 
 
 void _37ECRDInterrupt() {
-  setDataBus(PeekFromTRS80(0x37ec + (GPIOC_PDIR>>8)));
+  address = 0x37ec + (GPIOC_PDIR>>8);
+  setDataBus(PeekFromTRS80());
   resetWaitLatch();
 }
 
 void _37E8RDInterrupt() {
-  setDataBus(PeekFromTRS80(0x37e8 + (GPIOC_PDIR>>8)));
+  address = 0x37e8 + (GPIOC_PDIR>>8);
+  setDataBus(PeekFromTRS80());
   resetWaitLatch();
 }
 
 void _37E4RDInterrupt() {
-  setDataBus(PeekFromTRS80(0x37e4 + (GPIOC_PDIR>>8)));
+  address = 0x37e4 + (GPIOC_PDIR>>8);
+  setDataBus(PeekFromTRS80());
   resetWaitLatch();
 }
 
 void _37E0RDInterrupt() {
-  setDataBus(PeekFromTRS80(0x37e0 + (GPIOC_PDIR>>8)));
+  address = 0x37e0 + (GPIOC_PDIR>>8);
+  setDataBus(PeekFromTRS80());
   resetWaitLatch();  
 }
 
@@ -645,18 +648,9 @@ void setup() {
 
 Metro trs80ClockPulse = Metro(25);
 void loop() {  
-  /*
     if(trs80ClockPulse.check() == 1) { // invoke clock interrupt every 25ms
        cli();
-       if(iBusDirection == IN)
-          pinMode(D7,OUTPUT);
-       digitalWriteFast(D7,HIGH);
-       digitalWriteFast(INTERUPT_TO_TRS80, LOW);
-       if(iBusDirection == IN) {
-          delayMicroseconds(1);
-          pinMode(D7,INPUT);
-       }
+       invokeTRS80Interrupt(CLOCK);
        sei();
-    }
-    */    
+    }    
 }
