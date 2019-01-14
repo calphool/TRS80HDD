@@ -280,7 +280,7 @@ void invokeCommand() {
     p("    SEEK CMD\n");
     trackNum = dataRegister;
     disk1File.seek(trackNum * 2560);
-    statusRegister = INDEXHOLE;
+    statusRegister = HEADENGAGED;
     if(trackNum == 0)
         statusRegister |= TRACKZERO;
     invokeTRS80Interrupt(DISK);  

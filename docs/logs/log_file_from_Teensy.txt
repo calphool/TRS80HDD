@@ -1,7 +1,5 @@
-
 <---: 0x37EC  <--- (0x84) <::status reg::>
-:---> (0x00)  ---> 0x37E1 <::drive select::> 
- ??Received nonsense value for drive number, assuming 0??
+:---> (0x01)  ---> 0x37E1 <::drive select::> 
 :---> (0x03)  ---> 0x37EC <::command reg::> 
     RESTORE CMD
 <---: 0x37EC  <--- (0x24) <::status reg::>
@@ -530,10 +528,10 @@
 <---: 0x37EC  <--- (0x24) <::status reg::>
 <---: 0x37EC  <--- (0x24) <::status reg::>
 :---> (0x05)  ---> 0x37EE <::sector reg::> 
-:---> (0xFF)  ---> 0x37EE <::sector reg::> 
-:---> (0xFF)  ---> 0x37EC <::command reg::> 
-    -Unknown command: ff
-<---: 0x37EC  <--- (0x06) <::status reg::>
-<---: 0x37EC  <--- (0x06) <::status reg::>
+:---> (0x00)  ---> 0x37EF <::data reg::> 
+:---> (0x1B)  ---> 0x37EC <::command reg::> 
+    SEEK CMD
+<---: 0x37EC  <--- (0x24) <::status reg::>
+<---: 0x37EC  <--- (0x24) <::status reg::>
 :---> (0x88)  ---> 0x37EC <::command reg::> 
     READ SECTOR CMD
