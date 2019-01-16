@@ -69,6 +69,7 @@ I'm handling the FD1771 status register correctly when I get to the end of the b
 in the status register handling, and I think I might have an off-by-one problem in handling sector read commands.  So either 
 one of those problems could be the source of my rebooting problem.  However, I'm really close, and that makes me super happy.
 
+--------------------------------------------------------
 
 
 December 17, 2018
