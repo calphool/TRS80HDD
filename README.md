@@ -2,7 +2,7 @@
 Repo for TRS-80 Model 1 Drive emulator project
 
 
-![Version 2 of PCB](/img/TRS80HDD_v2.jpg?raw=true "Version 2 of PCB")
+![Version 4.1 of PCB](/img/TRS80HDD_v4.1.jpg?raw=true "Version 4.1 of PCB")
 
 Here we go again.  So after I finished the graphics/sound/communications card, I started working on a new
 project.  This time I'm working on interfacing the TRS-80 to a Teensy 3.6, which is an Arduino-ish microcontroller 
@@ -39,6 +39,38 @@ The data bus seems to be doing nothing at the moment, and I haven't figured out 
 Build Notes
 ===========
 
+January 16, 2019
+
+Considerable gnashing of teeth has occurred over the past month, but progress has been made.  The v3 and v3.1 designs 
+are basically a bust.  There has been some kind of race condition on the WR* side of the data bus, and figuring out what
+was going on has been nontrivial.  Folks on the Teensy forum basically said that the problem was that I was using 
+unrelated Teensy ports for my 8 data signals, and that digitalReadFast() wasn't fast enough when you used it that way.
+So they suggested I redesign the circuit so that all the data lines reside in a single Teensy port, which I did....
+and it made absolutely no difference... Luckily I didn't completely trust their diagnosis and I simultaneously created the 
+v4 design.  The v4 design was intended to fix the race condition by implementing a latch on the 
+data bus (more or less a classical output port design).  This did improve things (actually started getting data to the 
+Teensy sometimes), but it wasn't reliable.  After a lot of hand wringing, someone on the Teensy forums suggested a slight 
+change to my wait flip flop triggering circuit so that it triggered as soon as an interesting address appeared (as soon 
+as the 37EX signal toggled) rather than waiting for both that *and* a RD* or WR* signal.  This made the circuit fairly 
+predictable, though it still glitches about 1 out of every 1000 writes.  The design is available in schematic v4.1.
+I'm thinking that perhaps if I swap out all the LS series chips with ALS series chips, I'll get just enough of a 
+performance boost across the combined propogation delay that I can get the WR* side rock solid like the RD* side is.  We'll
+see.
+
+However, the good news is that I'm actually booting stuff now.
+
+![NEWDOS screen shot](/img/NewDosScreenShot.jpg?raw=true "Screen Shot")
+
+There's still *some* kind of bug in my emulation, because it gets loaded and then doesn't give me control, and keeps 
+trying to reload.  I know that the problem is somehow related to the clock signal, because when I shut it off it loads and
+then just sits there.  If I turn it on, it loads, and then reloads, in a loop.  So I'm guessing I need to do something 
+besides just turn the clock on, but I don't know what it's expecting just yet.  It could be as simple as making sure that
+I'm handling the FD1771 status register correctly when I get to the end of the boot cycle.  I do think I've got a few bugs left 
+in the status register handling, and I think I might have an off-by-one problem in handling sector read commands.  So either 
+one of those problems could be the source of my rebooting problem.  However, I'm really close, and that makes me super happy.
+
+
+
 December 17, 2018
 
 Well I'm working on version 2 of this project.  I found a copy of Byte Magazine from the late 70s that included a 
@@ -49,11 +81,3 @@ boards that are light years beyond what my little projects are capable of.  He t
 helped me realize that I used a 74LS241 for my data buffer, and I probably meant to use a 74LS244.  The difference 
 is that 74LS241 has four bits that are controlled by a positive enable pin, and the other four are controlled by 
 a negative enable pin.  So I ordered some 74LS244's and we'll see where that gets me.
-
-
-Help/Advice
-===========
-
-If you happen to have any experience with 8-bit hardware interfacing, I would certainly appreciate an opportunity to chat.
-If you have access to a decent Logic Analyzer and are willing to loan it out, that would be even more awesome, since 
-I find that trying to debug this emulator with nothing more than a 4-channel oscilloscope ends up being a challenge.
