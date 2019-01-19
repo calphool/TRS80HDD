@@ -203,16 +203,14 @@ void setup() {
 int ix=0;
 Metro trs80ClockPulse = Metro(25);
 void loop() {  
+  /*
     if(trs80ClockPulse.check() == 1) { // invoke clock interrupt every 25ms
        if(motorRunningCtr > 0) 
            motorRunningCtr--;
-       //ix++;
-       //if(ix % 40 == 0) {
-        // p("Sectors: %d %d\n",sectorsRead,lastDiskCmdCtr);
-       //}
        if(lastDiskCmdCtr >= 0) 
           lastDiskCmdCtr--;
        if(lastDiskCmdCtr == 0) 
            invokeTRS80Interrupt(CLOCK);
-    }    
+    }
+    */    
 }

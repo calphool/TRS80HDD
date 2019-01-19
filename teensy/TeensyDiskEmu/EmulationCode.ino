@@ -55,6 +55,7 @@ volatile int sectorNum = 0;
 volatile int dataRegister = 0;
 volatile int commandRegister = 0;
 volatile int byteCtr = 0;
+volatile int afterSectorBusyCtr = 0;
 volatile int busyCtr = 0;
 volatile int DRQCtr = 0;
 volatile int statusRegister;
@@ -139,7 +140,8 @@ inline void cmdStepOut() {
 
 inline void cmdRead() {
     byteCtr = 256;
-    busyCtr = 260;
+    busyCtr = 256;
+    afterSectorBusyCtr = 4;
     p("    READ SECTOR CMD\n");
     statusRegister = BUSY;
     currentCommand = CMD_READ;
@@ -153,11 +155,18 @@ inline void cmdRead() {
     //invokeTRS80Interrupt(DISK);
 }
 
-inline void cmdForceInterrupt() {
+inline void cmdForceInterrupt(int interruptType) {
     p("    FORCE INTERRUPT\n");
-    statusRegister = INDEXHOLE;
+    statusRegister = HEADENGAGED;
     if(trackNum == 0)
         statusRegister |= TRACKZERO;
+
+    if(interruptType != 0x00) {
+      p("Special interrupt requested! %x",interruptType);
+    }
+    //if((interruptType & 0x01) == 0x01)
+    //     invokeTRS80Interrupt(DISK);
+
 
     currentCommand = CMD_FORCE_INTERRUPT;
 }
@@ -213,7 +222,7 @@ void invokeCommand() {
     return;
   }
   if((commandRegister & CMD_FORCE_INTERRUPT_MASK) == CMD_FORCE_INTERRUPT) {        // force interrupt command
-     cmdForceInterrupt();
+     cmdForceInterrupt(commandRegister & 0x0f);
      return;
   }
   if((commandRegister & CMD_SEEK_MASK) == CMD_SEEK) {         // seek command
@@ -337,11 +346,16 @@ inline int getStatusRegister() {
     if(currentCommand == CMD_READ) {
       if(DRQCtr == 0) 
           statusRegister |= DRQ;
+      
+      if(byteCtr == 0)
+          statusRegister &= ~(DRQ);
     }
 
     if(busyCtr == 0) {
-      statusRegister &= ~(BUSY);
-      statusRegister &= ~(DRQ);
+      afterSectorBusyCtr--;
+      if(afterSectorBusyCtr <= 0) { 
+         statusRegister &= ~(BUSY);
+      }
     }
 
     if(motorRunningCtr == 0)
@@ -349,7 +363,15 @@ inline int getStatusRegister() {
     else
        statusRegister &= ~(NOTREADY);
 
+    if(sectorsRead == 0) {
+      if(trackNum == 0) {
+        statusRegister |= TRACKZERO; // force track number to zero on the first status check
+      }
+    }
+
     p(" <--- (0x%02X) <::status reg::>\n",statusRegister);
+    
+    //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
     return statusRegister;
 }
 
@@ -361,11 +383,8 @@ inline int getDataRegister() {
        }
        dataRegister = disk1File.read();
     }
-    else {
-      statusRegister &= ~(DRQ);
-    }      
     
-    p(" <--- (0x%02X) <::data reg:: [%d]> \n", dataRegister,byteCtr);
+    p(" <--- (0x%02X) <::data reg::> \n", dataRegister);
     return dataRegister;
 }
 
