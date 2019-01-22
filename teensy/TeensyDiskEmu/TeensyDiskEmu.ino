@@ -18,7 +18,6 @@ extern File disk1File;
 extern String disk1FileName;
 extern volatile int motorRunningCtr;
 extern volatile int sectorsRead;
-extern volatile int lastDiskCmdCtr;
 
 
 
@@ -26,6 +25,7 @@ volatile int dataBusDirection = -1;
 volatile int iBusDirection = 2;
 volatile int dataBus;
 volatile int address;
+volatile int interruptStatus;
 
 
 
@@ -53,6 +53,7 @@ void pinSetup() {
   pinMode(NOTHING1, OUTPUT);
   pinMode(NOTHING2, OUTPUT);
   pinMode(NOTHING3, OUTPUT);
+  dataBusOutFromTeensyMode();
   dataBusInToTeensyMode();
 }
 
@@ -65,18 +66,8 @@ void initialPinState() {
 
 
 
+IntervalTimer it;
 
-
-
-
-#define DISK  0x40
-#define CLOCK 0x80
-inline void invokeTRS80Interrupt(int type) {
-  setDataBus(type);
-  digitalWriteFast(INTERUPT_TO_TRS80, LOW);
-  delayMicroseconds(1);
-  digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
-}
 
 
 
@@ -181,7 +172,7 @@ void setup() {
   configureInterrupts();                             // tie interrupt lines to code blocks
   openDiskFileByName(disk1FileName);                 // open file specified from SD card
   
-  p("\nReady.\n");
+  p((char*)"\nReady.\n");
   if(!Serial) {
     L2_YELLOW();                     // unable to communicate over serial, show L2 as yellow
     L1_GREEN();
@@ -192,25 +183,18 @@ void setup() {
   }
 
   init1771Emulation();
-  lastDiskCmdCtr = 2147483646;
+
+  p((char*)"Setting up interval timer: %d", it.begin(clockTick, 25000));
    
   sei();                             // enable interrupts
 }
 
 
+void clockTick() {
+  interruptStatus = interruptStatus | 0x80;
+  //digitalWriteFast(INTERUPT_TO_TRS80,LOW);
+}
 
 
-int ix=0;
-Metro trs80ClockPulse = Metro(25);
 void loop() {  
-  /*
-    if(trs80ClockPulse.check() == 1) { // invoke clock interrupt every 25ms
-       if(motorRunningCtr > 0) 
-           motorRunningCtr--;
-       if(lastDiskCmdCtr >= 0) 
-          lastDiskCmdCtr--;
-       if(lastDiskCmdCtr == 0) 
-           invokeTRS80Interrupt(CLOCK);
-    }
-    */    
 }

@@ -20,8 +20,19 @@ inline void dataBusOutFromTeensyMode() {
 
 inline void dataBusInToTeensyMode() {
   if(iBusDirection == IN) return;
+
+// didn't seem to be working, replaced with pinMode for now...
+//  GPIOC_PDDR = GPIOC_PDDR & 0xff00;
+  pinMode(D0,INPUT);
+  pinMode(D1,INPUT);
+  pinMode(D2,INPUT);
+  pinMode(D3,INPUT);
+  pinMode(D4,INPUT);
+  pinMode(D5,INPUT);
+  pinMode(D6,INPUT);
+  pinMode(D7,INPUT);  
+
   
-  GPIOC_PDDR = GPIOC_PDDR & 0xff00;
   iBusDirection = IN;
 }
 
@@ -54,7 +65,7 @@ inline void resetWaitLatch() {
   delayMicroseconds(1);
   digitalWriteFast(FF_CLR,HIGH);
   delayMicroseconds(1);
-  digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
+  //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
 }
 
 

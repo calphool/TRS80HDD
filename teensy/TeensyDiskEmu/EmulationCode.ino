@@ -66,36 +66,33 @@ volatile int motorRunningCtr;
 volatile int sectorsRead = 0;
 volatile int lastDiskCmdCtr;
 
-
-
 void init1771Emulation() {
   statusRegister = NOTREADY | TRACKZERO;
 }
 
 
 inline void cmdRestore() {
-    p("    RESTORE CMD\n");
+    p((char*)"    RESTORE CMD\n");
     trackNum = 0;
     disk1File.seek(0);
     statusRegister = HEADENGAGED | TRACKZERO;
     currentCommand = CMD_RESTORE;
-    //invokeTRS80Interrupt(DISK);
+    interruptStatus |= (0x40);
 }
 
 inline void cmdSeek() {
-    p("    SEEK CMD\n");
+    p((char*)"    SEEK CMD\n");
     trackNum = dataRegister;
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = HEADENGAGED | BUSY;
     if(trackNum == 0)
         statusRegister |= TRACKZERO;
     busyCtr = 79;
-    currentCommand = CMD_SEEK;
-    //invokeTRS80Interrupt(DISK);    
+    currentCommand = CMD_SEEK;    
 }
 
 inline void cmdStep() {
-    p("    STEP CMD\n");
+    p((char*)"    STEP CMD\n");
     if((commandRegister & 0x10) == 0x10) {            // only do this stuff if the update flag is set on the track register, otherwise just generate an interupt like we complied
       if(iTrackDirection == OUT) {
           if(trackNum > 0)
@@ -108,26 +105,24 @@ inline void cmdStep() {
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;  
     currentCommand = CMD_STEP;  
-    //invokeTRS80Interrupt(DISK);
 }
 
 
 inline void cmdStepIn() {
-    p("    STEP IN CMD\n");
-    if(commandRegister & 0x10 == 0x10) {           // only do this stuff if the update flag is set on the track register, otherwise just generate an interupt like we complied
+    p((char*)"    STEP IN CMD\n");
+    if((commandRegister & 0x10) == 0x10) {           // only do this stuff if the update flag is set on the track register, otherwise just generate an interupt like we complied
       trackNum++;
     }
     iTrackDirection = IN; // IN is away from 0
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
     currentCommand = CMD_STEPIN;
-    //invokeTRS80Interrupt(DISK);
 }
 
 
 inline void cmdStepOut() {  
-    p("    STEP OUT CMD\n");
-    if(commandRegister & 0x10 == 0x10) {           // only do this stuff if the update flag is set on the track register, otherwise just generate an interupt like we complied
+    p((char*)"    STEP OUT CMD\n");
+    if((commandRegister & 0x10) == 0x10) {           // only do this stuff if the update flag is set on the track register, otherwise just generate an interupt like we complied
       if(trackNum > 0) 
          trackNum--;
     }
@@ -135,66 +130,61 @@ inline void cmdStepOut() {
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
     currentCommand = CMD_STEPOUT;
-    //invokeTRS80Interrupt(DISK);
 }
 
 inline void cmdRead() {
     byteCtr = 256;
     busyCtr = 256;
-    afterSectorBusyCtr = 4;
-    p("    READ SECTOR CMD\n");
+    afterSectorBusyCtr = 5;
+    p((char*)"    READ SECTOR CMD\n");
     statusRegister = BUSY;
     currentCommand = CMD_READ;
     DRQCtr = 0;
     if(sectorsRead == 0)
        DRQCtr = 4;
-    else
+    else 
        statusRegister |= DRQ;
 
     sectorsRead++;
-    //invokeTRS80Interrupt(DISK);
 }
 
 inline void cmdForceInterrupt(int interruptType) {
-    p("    FORCE INTERRUPT\n");
+    p((char*)"    FORCE INTERRUPT\n");
     statusRegister = HEADENGAGED;
     if(trackNum == 0)
         statusRegister |= TRACKZERO;
 
     if(interruptType != 0x00) {
-      p("Special interrupt requested! %x",interruptType);
+      p((char*)"Special interrupt requested! %x",interruptType);
     }
-    //if((interruptType & 0x01) == 0x01)
-    //     invokeTRS80Interrupt(DISK);
-
 
     currentCommand = CMD_FORCE_INTERRUPT;
 }
 
 
 inline void cmdWrite() {
-  p("    WRITE CMD (unimpl)\n");
+  p((char*)"    WRITE CMD (unimpl)\n");
   currentCommand = CMD_WRITE;
 }
 
 inline void cmdReadAddr() {
-   p("    READ ADDR (unimpl)\n");
+   p((char*)"    READ ADDR (unimpl)\n");
    currentCommand = CMD_READ_ADDR;
 }
 
 inline void cmdReadTrk() {
-  p("    READ TRK (unimpl)\n"); 
+  p((char*)"    READ TRK (unimpl)\n"); 
   currentCommand = CMD_READ_TRK ;
 }
 
 inline void cmdWriteTrk() {
-  p("    WRITE TRK (unimpl)\n");
+  p((char*)"    WRITE TRK (unimpl)\n");
   currentCommand = CMD_WRITE_TRK;
 }
 
 
 void invokeCommand() {
-    p("<::command reg::> \n");
+    p((char*)"<::command reg::> \n");
     commandRegister = dataBus;
     lastDiskCmdCtr = 400;
   
@@ -259,12 +249,14 @@ void invokeCommand() {
   }
 
   currentCommand = 0;
-  p("    UNKNOWN COMMAND\n");
+  p((char*)"    UNKNOWN COMMAND\n");
+  //digitalWriteFast(INTERUPT_TO_TRS80, LOW);
+  //p((char*)" (irq=1) ");
 }
 
 
 inline void driveSelect() {
-    p("<::drive select::> \n");
+    p((char*)"<::drive select::> \n");
     if(dataBus == 1)
       currentDrive = 0;
     else if(dataBus == 2)
@@ -274,36 +266,40 @@ inline void driveSelect() {
     else if(dataBus == 8)
       currentDrive = 3;
     else {
-      p(" ??Received nonsense value for drive number, assuming 0??\n");
+      p((char*)" ??Received nonsense value for drive number, assuming 0??\n");
       currentDrive = 0;
     }
-    statusRegister = HEADENGAGED;
+    statusRegister |= HEADENGAGED;
     if(trackNum == 0) {
       statusRegister |= TRACKZERO;
     }
     motorRunningCtr = 80;
+
+    if(currentCommand == CMD_SEEK && busyCtr > 8) { // hack to make seeks late in the cycle match
+      busyCtr = 8;
+    }
 }
 
 inline void setTrkReg() {
-    p("<::track reg::> \n");
+    p((char*)"<::track reg::> \n");
     trackNum = dataBus;  // track
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
-    statusRegister = INDEXHOLE;
+    //statusRegister = INDEXHOLE;
     return;
 }
 
 inline void setSectorReg() {
-    p("<::sector reg::> \n");
+    p((char*)"<::sector reg::> \n");
     sectorNum = dataBus; // sector
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
-    statusRegister = INDEXHOLE;
+    //statusRegister = INDEXHOLE;
     return;
 }
 
 inline void setDataReg() {
-    p("<::data reg::> \n");
+    p((char*)"<::data reg::> \n");
     dataRegister = dataBus;  // data byte
-    statusRegister = INDEXHOLE;
+    //statusRegister = INDEXHOLE;
     return;
 }
 
@@ -313,7 +309,7 @@ inline void setDataReg() {
  *  **********************************************************************
  */
 void PokeFromTRS80() {
-  p(":---> (0x%02X)  ---> 0x%04X ",dataBus, address);  
+  p((char*)"%d.[%02X,%02X] :---> (0x%02X)  ---> 0x%04X ",sectorsRead, trackNum,sectorNum,dataBus, address);  
   
   if((address & 0xfffc) == 0x37e0) { // drive select
      return driveSelect();
@@ -331,7 +327,7 @@ void PokeFromTRS80() {
     return setDataReg();
   }
 
-  p("Unhandled POKE!\n\n");
+  p((char*)"Unhandled POKE!\n\n");
 }
 
 
@@ -347,14 +343,26 @@ inline int getStatusRegister() {
       if(DRQCtr == 0) 
           statusRegister |= DRQ;
       
-      if(byteCtr == 0)
+      if(byteCtr == 0) {
           statusRegister &= ~(DRQ);
+          interruptStatus |= (0x40);
+      }
+    }
+
+    if(currentCommand == CMD_SEEK) {
+      if(busyCtr <= 0) {
+          interruptStatus |= (0x40);
+          //digitalWriteFast(INTERUPT_TO_TRS80, LOW);
+          //p((char*)" (irq=1) ");
+      }
     }
 
     if(busyCtr == 0) {
       afterSectorBusyCtr--;
       if(afterSectorBusyCtr <= 0) { 
          statusRegister &= ~(BUSY);
+         //digitalWriteFast(INTERUPT_TO_TRS80, LOW);
+         //p((char*)" (irq=1) ");
       }
     }
 
@@ -369,7 +377,7 @@ inline int getStatusRegister() {
       }
     }
 
-    p(" <--- (0x%02X) <::status reg::>\n",statusRegister);
+    p((char*)" <--- (0x%02X) <::status reg::>\n",statusRegister);
     
     //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
     return statusRegister;
@@ -384,7 +392,7 @@ inline int getDataRegister() {
        dataRegister = disk1File.read();
     }
     
-    p(" <--- (0x%02X) <::data reg::> \n", dataRegister);
+    p((char*)" <--- (0x%02X) <::data reg::> \n", dataRegister);
     return dataRegister;
 }
 
@@ -394,9 +402,10 @@ inline int getDataRegister() {
  * ***************************************************************
  */
 int PeekFromTRS80() {
-  p("<---: 0x%04X ",address); 
+  p((char*)"%d.[%02X,%02X] <---: 0x%04X ",sectorsRead,trackNum,sectorNum,address); 
 
   if(address == 0x37ec) {             // read status register
+    interruptStatus &= ~(0x40);
     return getStatusRegister();
   }
 
@@ -405,20 +414,24 @@ int PeekFromTRS80() {
   }
 
   if(address == 0x37ee) {              // read sector register
-    p(" <--- (0x%02X) <::sector reg::>\n", sectorNum);
+    p((char*)" <--- (0x%02X) <::sector reg::>\n", sectorNum);
     return sectorNum;
   }
 
   if(address == 0x37ed) {              // read track register
-    p(" <--- (0x%02X) <::track reg::>\n", trackNum);
+    p((char*)" <--- (0x%02X) <::track reg::>\n", trackNum);
     return trackNum;
   }  
 
-  if(address == 0x37e0) {             // read interrupt latch (supposed to reset the latch)
-    p(" <--- (0x80) <::interupt latch::>\n");
-    return 0x80;
+  if(address == 0x37e0) {             // read interrupt latch (supposed to reset the latch)       
+    digitalWriteFast(INTERUPT_TO_TRS80,HIGH);
+    interruptStatus = 0;
+ 
+    p((char*)" <--- (0x%02X) <::interrupt latch::>\n",interruptStatus);
+
+    return interruptStatus;
   }
 
-  p(" <--- (0xfe) <::HUH Why Am I Here?::>\n");
+  p((char*)" <--- (0xfe) <::HUH Why Am I Here?::>\n");
   return 0xfe;
 }

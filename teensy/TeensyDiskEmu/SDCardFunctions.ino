@@ -11,7 +11,7 @@ void openDiskFileByName(String sFileName) {
   StringStream stream(strmOutput); // set up string stream to capture SD card directory
   
   if (!sdEx.begin()) {             // couldn't establish SD card connection
-      p("ERROR:  Unable to open SdFatSdioEX object.\n");
+      p((char*)"ERROR:  Unable to open SdFatSdioEX object.\n");
       sdEx.initErrorHalt("SdFatSdioEX begin() failed");
       L2_RED();
       L1_RED();
@@ -28,18 +28,18 @@ void openDiskFileByName(String sFileName) {
           }
           stream.flush();
           if(strmOutput == sFileName) {
-             p("Opening disk 1 file: ");
+             p((char*)"Opening disk 1 file: ");
              p((char*)strmOutput.c_str());
              disk1File = sdEx.open(strmOutput.c_str(), FILE_READ);
              if(!disk1File) {
-                p("\nERROR:  Unable to open file\n");
+                p((char*)"\nERROR:  Unable to open file\n");
                 L1_RED();
                 L2_RED();
                 file.close();
                 return;
              }
              else {
-              p("\n%d bytes in file.\n",disk1File.available());
+              p((char*)"\n%d bytes in file.\n",disk1File.available());
              }
           }
           strmOutput = "";
