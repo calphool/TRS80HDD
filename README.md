@@ -61,13 +61,27 @@ However, the good news is that I'm actually booting stuff now.
 
 ![NEWDOS screen shot](/img/NewDosScreenShot.jpg?raw=true "Screen Shot")
 
-There's still *some* kind of bug in my emulation, because it gets loaded and then doesn't give me control, and keeps 
+~~There's still *some* kind of bug in my emulation, because it gets loaded and then doesn't give me control, and keeps 
 trying to reload.  I know that the problem is somehow related to the clock signal, because when I shut it off it loads and
 then just sits there.  If I turn it on, it loads, and then reloads, in a loop.  So I'm guessing I need to do something 
 besides just turn the clock on, but I don't know what it's expecting just yet.  It could be as simple as making sure that
 I'm handling the FD1771 status register correctly when I get to the end of the boot cycle.  I do think I've got a few bugs left 
 in the status register handling, and I think I might have an off-by-one problem in handling sector read commands.  So either 
-one of those problems could be the source of my rebooting problem.  However, I'm really close, and that makes me super happy.
+one of those problems could be the source of my rebooting problem.  However, I'm really close, and that makes me super happy.~~
+
+With some help from someone on reddit, I was able to get it booting.  It's related to the fact that I'm using JV1 disk images, 
+which apparently don't encode all the data that was on the original disks.  Apparently part of what was missing was a code that 
+can be returned in the status register that indicates to the operating system that what it's reading represents directory data.
+Since my disk images don't have that info, I guess my code is supposed to assume track 17 is the directory data, so it was 
+as simple as forcing the status register to OR 0x20 with whatever it's already doing if the track is 17.
+
+It's still not quite working right, because I can't do a DIR command (says "device not available"), but it's booting and semi-
+usable now.  Now I just need to figure out why I can't do a DIR command.  I'm beginning to wonder if I shouldn't just figure 
+out how to port the applicable code from SDLTRS over to the Teensy.  Then I'd be able to support several disk formats, and 
+these kinds of strange little details would be handled for me, rather than me slowly finding them one by one.  I've avoided 
+trying the port exercise, because I wasn't sure if the C compilers are compatible, or if I'll end up with strange data size 
+issues or endian issues.  I might make one quick stab at getting it working without the porting effort, and then if it doesn't
+work I'll dive into that.
 
 --------------------------------------------------------
 
