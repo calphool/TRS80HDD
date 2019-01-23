@@ -40,6 +40,7 @@ Build Notes
 ===========
 
 January 22, 2019
+
 ![It's Alive!](/img/its-alive.jpg?raw=true "It's Alive!")
 
 Holy smokes.  [It's working.](https://www.youtube.com/watch?v=pcdh7HSC1nE)  I've got NEWDOS/80 v2 booting up, and it seems quite functional.  
