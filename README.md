@@ -39,6 +39,15 @@ The data bus seems to be doing nothing at the moment, and I haven't figured out 
 Build Notes
 ===========
 
+January 22, 2019
+![It's Alive!](/img/its-alive.jpg?raw=true "It's Alive!")
+
+Holy smokes.  [It's working.](https://www.youtube.com/watch?v=pcdh7HSC1nE)  I've got NEWDOS/80 v2 booting up, and it seems quite functional.  
+Since I haven't implemented WRITE handling code, and only the most critical READ handling code, it's pretty fragile right now, but it's booting 
+and responding to commands.  This is the v4 board, so if you're following along and want to make your own, v4 with current code is the first 
+actually functioning configuration.  
+
+
 January 16, 2019
 
 Considerable gnashing of teeth has occurred over the past month, but progress has been made.  The v3 and v3.1 designs 

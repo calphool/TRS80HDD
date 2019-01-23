@@ -65,6 +65,8 @@ volatile int motorRunningCtr;
 
 volatile int sectorsRead = 0;
 volatile int lastDiskCmdCtr;
+volatile int oldInterruptStatus;
+volatile int statusRegisterChecks = 0;
 
 void init1771Emulation() {
   statusRegister = NOTREADY | TRACKZERO;
@@ -78,6 +80,7 @@ inline void cmdRestore() {
     statusRegister = HEADENGAGED | TRACKZERO;
     currentCommand = CMD_RESTORE;
     interruptStatus |= (0x40);
+    L2_BLUE();
 }
 
 inline void cmdSeek() {
@@ -88,7 +91,8 @@ inline void cmdSeek() {
     if(trackNum == 0)
         statusRegister |= TRACKZERO;
     busyCtr = 79;
-    currentCommand = CMD_SEEK;    
+    currentCommand = CMD_SEEK;   
+    L2_YELLOW(); 
 }
 
 inline void cmdStep() {
@@ -105,6 +109,7 @@ inline void cmdStep() {
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;  
     currentCommand = CMD_STEP;  
+    L2_CYAN();
 }
 
 
@@ -117,6 +122,7 @@ inline void cmdStepIn() {
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
     currentCommand = CMD_STEPIN;
+    L2_GREEN();
 }
 
 
@@ -130,6 +136,7 @@ inline void cmdStepOut() {
     disk1File.seek(trackNum * 2560 + sectorNum * 256);
     statusRegister = INDEXHOLE;
     currentCommand = CMD_STEPOUT;
+    L2_WHITE();
 }
 
 inline void cmdRead() {
@@ -146,6 +153,7 @@ inline void cmdRead() {
        statusRegister |= DRQ;
 
     sectorsRead++;
+    L2_VIOLET();
 }
 
 inline void cmdForceInterrupt(int interruptType) {
@@ -159,6 +167,7 @@ inline void cmdForceInterrupt(int interruptType) {
     }
 
     currentCommand = CMD_FORCE_INTERRUPT;
+    L2_BLACK();
 }
 
 
@@ -309,7 +318,7 @@ inline void setDataReg() {
  *  **********************************************************************
  */
 void PokeFromTRS80() {
-  p((char*)"%d.[%02X,%02X] :---> (0x%02X)  ---> 0x%04X ",sectorsRead, trackNum,sectorNum,dataBus, address);  
+  p((char*)"%d.[%02X,%02X] :---> (0x%02X)  ---> 0x%04X ",/*sectorsRead*/0, trackNum,sectorNum,dataBus, address);  
   
   if((address & 0xfffc) == 0x37e0) { // drive select
      return driveSelect();
@@ -332,6 +341,7 @@ void PokeFromTRS80() {
 
 
 inline int getStatusRegister() {
+    statusRegisterChecks++;
     if(DRQCtr > 0) {
       DRQCtr--;
     }
@@ -381,6 +391,13 @@ inline int getStatusRegister() {
       statusRegister |= 0x20;   // goofy thing that's required because NEWDOS expects to see "FA" status bits on track 17... is this what was keeping me from booting?
     }
 
+    if(statusRegisterChecks % 1200 == 0) {
+      if((statusRegister & INDEXHOLE) == INDEXHOLE)
+        statusRegister &= ~(INDEXHOLE);
+      else
+        statusRegister |= INDEXHOLE;
+    }
+    
     p((char*)" <--- (0x%02X) <::status reg::>\n",statusRegister);
     
     //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
@@ -406,7 +423,7 @@ inline int getDataRegister() {
  * ***************************************************************
  */
 int PeekFromTRS80() {
-  p((char*)"%d.[%02X,%02X] <---: 0x%04X ",sectorsRead,trackNum,sectorNum,address); 
+  p((char*)"%d.[%02X,%02X] <---: 0x%04X ",/*sectorsRead*/0,trackNum,sectorNum,address); 
 
   if(address == 0x37ec) {             // read status register
     interruptStatus &= ~(0x40);
@@ -428,11 +445,14 @@ int PeekFromTRS80() {
   }  
 
   if(address == 0x37e0) {             // read interrupt latch (supposed to reset the latch)       
-    digitalWriteFast(INTERUPT_TO_TRS80,HIGH);
-    interruptStatus = 0;
+    if((oldInterruptStatus & 0x80) == 0x80) {
+        digitalWriteFast(INTERUPT_TO_TRS80,HIGH);
+        interruptStatus = 0;      
+    }
  
     p((char*)" <--- (0x%02X) <::interrupt latch::>\n",interruptStatus);
 
+    oldInterruptStatus = interruptStatus;
     return interruptStatus;
   }
 

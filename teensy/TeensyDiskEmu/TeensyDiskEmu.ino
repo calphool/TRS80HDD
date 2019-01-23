@@ -191,8 +191,9 @@ void setup() {
 
 
 void clockTick() {
+  // comment out if you want to turn off the clock functionality...
   interruptStatus = interruptStatus | 0x80;
-  //digitalWriteFast(INTERUPT_TO_TRS80,LOW);
+  digitalWriteFast(INTERUPT_TO_TRS80,LOW);
 }
 
 
