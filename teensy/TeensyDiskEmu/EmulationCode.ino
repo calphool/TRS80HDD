@@ -377,6 +377,10 @@ inline int getStatusRegister() {
       }
     }
 
+    if(trackNum == 17) {
+      statusRegister |= 0x20;   // goofy thing that's required because NEWDOS expects to see "FA" status bits on track 17... is this what was keeping me from booting?
+    }
+
     p((char*)" <--- (0x%02X) <::status reg::>\n",statusRegister);
     
     //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
