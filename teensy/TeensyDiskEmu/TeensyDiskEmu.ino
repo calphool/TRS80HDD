@@ -1,7 +1,5 @@
 //for use with TRSHDD board v4
 
-#include <Metro.h>
-
 #include <BlockDriver.h>
 #include <FreeStack.h>
 #include <MinimumSerial.h>
@@ -14,17 +12,13 @@
 #include "defines.h"
 
 
-extern File diskFile[5];
-extern String sDiskFileName[5];
-extern volatile int sectorsRead;
+extern drivesettings Drives[4];
+extern volatile int interruptStatus;
 
 
-
-volatile int dataBusDirection = -1;
 volatile int iBusDirection = 2;
 volatile int dataBus;
 volatile int address;
-volatile int interruptStatus;
 
 
 
@@ -195,7 +189,7 @@ void setup() {
 void clockTick() {
   // comment out if you want to turn off the clock functionality...
   interruptStatus = interruptStatus | 0x80;
-  //digitalWriteFast(INTERUPT_TO_TRS80,LOW);
+  digitalWriteFast(INTERUPT_TO_TRS80,LOW);
 }
 
 
@@ -205,13 +199,13 @@ void loop() {
 
    while (Serial.available() > 0 ) {
        sCommand = Serial.readString().trim();
-       p("\nReceived command:  >>%s<<\n\n",sCommand.c_str());
+       p((char*)"\nReceived command:  >>%s<<\n\n",sCommand.c_str());
        
        if(sCommand.indexOf("mount ") != -1) {
            sCommand = sCommand.substring(sCommand.indexOf("mount ") + 6);
            dNum = sCommand.substring(0,2).toInt();
            sCommand = sCommand.substring(2);
-           p("Mounting disk image file: >>%s<< on drive %d\n",sCommand.c_str(),dNum);
+           p((char*)"Mounting disk image file: >>%s<< on drive %d\n",sCommand.c_str(),dNum);
            openDiskFileByName(sCommand,dNum);
            init1771Emulation();
        }
@@ -222,7 +216,7 @@ void loop() {
 
        if(sCommand.indexOf("show mounts") != -1) {
           for(int i=0;i<4;i++) {
-            p("%d. %s\n",i,sDiskFileName[i].c_str());
+            p((char*)"%d. %s\n",i,Drives[i].sDiskFileName.c_str());
           }
        }
    }

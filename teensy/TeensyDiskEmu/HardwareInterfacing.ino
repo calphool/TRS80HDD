@@ -1,8 +1,5 @@
 
 inline void dataBusOutFromTeensyMode() {
-  // didn't seem to be working, replaced with pinMode for now...
-  //GPIOC_PDDR = GPIOC_PDDR | 0x00ff;
-
   if(iBusDirection == OUT) return;
   
   pinMode(D0,OUTPUT);
@@ -21,8 +18,6 @@ inline void dataBusOutFromTeensyMode() {
 inline void dataBusInToTeensyMode() {
   if(iBusDirection == IN) return;
 
-// didn't seem to be working, replaced with pinMode for now...
-//  GPIOC_PDDR = GPIOC_PDDR & 0xff00;
   pinMode(D0,INPUT);
   pinMode(D1,INPUT);
   pinMode(D2,INPUT);
@@ -31,7 +26,6 @@ inline void dataBusInToTeensyMode() {
   pinMode(D5,INPUT);
   pinMode(D6,INPUT);
   pinMode(D7,INPUT);  
-
   
   iBusDirection = IN;
 }
@@ -60,12 +54,10 @@ void initFlipFlop() {
 
 /* reset the latch that's tied to TRS-80 WAIT* line */
 inline void resetWaitLatch() {
-  //digitalWrite(FF_PRE,HIGH);
   digitalWriteFast(FF_CLR,LOW);
   delayMicroseconds(1);
   digitalWriteFast(FF_CLR,HIGH);
   delayMicroseconds(1);
-  //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
 }
 
 

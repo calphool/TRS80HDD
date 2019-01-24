@@ -64,16 +64,25 @@
 #define IN 0
 #define OUT 1
 
+typedef struct  {
+   volatile int trackNum=0;
+   volatile int sectorNum=0;
+   volatile int dataRegister=0;
+   volatile int commandRegister;
+   volatile int statusRegister;
+   volatile int byteCtr = 0;
+   volatile int afterSectorBusyCtr = 0;
+   volatile int busyCtr = 0;
+   volatile int DRQCtr = 0;
 
-// forward declarations
-/*
-inline void dataBusOutFromTeensyMode();
-inline void dataBusInToTeensyMode();
-void initFlipFlop();
-inline void setDataBus(int b);
-inline int getDataBusValue();
-inline void resetWaitLatch();
-int PeekFromTRS80();
-void openDiskFileByName(String sFileName);
-void p(char *fmt, ... );
-*/
+   volatile int iIndexHole = 1;
+   volatile int iTrackDirection = IN;
+   volatile int motorRunningCtr;
+
+   volatile int sectorsRead = 0;
+   volatile int statusRegisterChecks = 0;
+   volatile int currentCommand;
+   File diskFile;
+   String sDiskFileName;
+}
+drivesettings;

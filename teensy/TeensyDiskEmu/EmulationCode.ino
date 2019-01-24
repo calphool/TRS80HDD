@@ -49,29 +49,10 @@
 #define CMD_FORCE_INTERRUPT_MASK 0xf0
 
 volatile int currentDrive = 0x0;
+volatile int interruptStatus;
+volatile int oldInterruptStatus;
 
-typedef struct  {
-   volatile int trackNum=0;
-   volatile int sectorNum=0;
-   volatile int dataRegister=0;
-   volatile int commandRegister;
-   volatile int statusRegister;
-   volatile int byteCtr = 0;
-   volatile int afterSectorBusyCtr = 0;
-   volatile int busyCtr = 0;
-   volatile int DRQCtr = 0;
 
-   volatile int iIndexHole = 1;
-   volatile int iTrackDirection = IN;
-   volatile int motorRunningCtr;
-
-   volatile int sectorsRead = 0;
-   volatile int oldInterruptStatus;
-   volatile int statusRegisterChecks = 0;
-   volatile int currentCommand;
-   volatile int interruptStatus;
-}
-drivesettings;
 
 drivesettings Drives[4];
 
@@ -89,7 +70,7 @@ void init1771Emulation() {
 inline void cmdRestore() {
     p((char*)"    RESTORE CMD\n");
     Drives[currentDrive].trackNum = 0;
-    diskFile[currentDrive].seek(0);
+    Drives[currentDrive].diskFile.seek(0);
     Drives[currentDrive].statusRegister = HEADENGAGED | TRACKZERO;
     Drives[currentDrive].currentCommand = CMD_RESTORE;
     interruptStatus |= (0x40);
@@ -99,7 +80,7 @@ inline void cmdRestore() {
 inline void cmdSeek() {
     p((char*)"    SEEK CMD\n");
     Drives[currentDrive].trackNum = Drives[currentDrive].dataRegister;
-    diskFile[currentDrive].seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
+    Drives[currentDrive].diskFile.seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
     Drives[currentDrive].statusRegister = HEADENGAGED | BUSY;
     if(Drives[currentDrive].trackNum == 0)
         Drives[currentDrive].statusRegister |= TRACKZERO;
@@ -119,7 +100,7 @@ inline void cmdStep() {
         Drives[currentDrive].trackNum++;
       }
     }
-    diskFile[currentDrive].seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
+    Drives[currentDrive].diskFile.seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
     Drives[currentDrive].statusRegister = INDEXHOLE;  
     Drives[currentDrive].currentCommand = CMD_STEP;  
     L2_CYAN();
@@ -132,7 +113,7 @@ inline void cmdStepIn() {
       Drives[currentDrive].trackNum++;
     }
     Drives[currentDrive].iTrackDirection = IN; // IN is away from 0
-    diskFile[currentDrive].seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
+    Drives[currentDrive].diskFile.seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
     Drives[currentDrive].statusRegister = INDEXHOLE;
     Drives[currentDrive].currentCommand = CMD_STEPIN;
     L2_GREEN();
@@ -146,7 +127,7 @@ inline void cmdStepOut() {
          Drives[currentDrive].trackNum--;
     }
     Drives[currentDrive].iTrackDirection = OUT;                         // OUT is toward 0
-    diskFile[currentDrive].seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
+    Drives[currentDrive].diskFile.seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
     Drives[currentDrive].statusRegister = INDEXHOLE;
     Drives[currentDrive].currentCommand = CMD_STEPOUT;
     L2_WHITE();
@@ -304,7 +285,7 @@ inline void driveSelect() {
 inline void setTrkReg() {
     p((char*)"<::track reg::> \n");
     Drives[currentDrive].trackNum = dataBus;  // track
-    diskFile[currentDrive].seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
+    Drives[currentDrive].diskFile.seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
     //statusRegister = INDEXHOLE;
     return;
 }
@@ -312,7 +293,7 @@ inline void setTrkReg() {
 inline void setSectorReg() {
     p((char*)"<::sector reg::> \n");
     Drives[currentDrive].sectorNum = dataBus; // sector
-    diskFile[currentDrive].seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
+    Drives[currentDrive].diskFile.seek(Drives[currentDrive].trackNum * 2560 + Drives[currentDrive].sectorNum * 256);
     //statusRegister = INDEXHOLE;
     return;
 }
@@ -367,13 +348,13 @@ inline int getStatusRegister() {
       
       if(Drives[currentDrive].byteCtr == 0) {
           Drives[currentDrive].statusRegister &= ~(DRQ);
-          Drives[currentDrive].interruptStatus |= (0x40);
+          interruptStatus |= (0x40);
       }
     }
 
     if(Drives[currentDrive].currentCommand == CMD_SEEK) {
       if(Drives[currentDrive].busyCtr <= 0) {
-          Drives[currentDrive].interruptStatus |= (0x40);
+          interruptStatus |= (0x40);
           //digitalWriteFast(INTERUPT_TO_TRS80, LOW);
           //p((char*)" (irq=1) ");
       }
@@ -410,7 +391,7 @@ inline int getStatusRegister() {
         Drives[currentDrive].statusRegister |= INDEXHOLE;
     }
     
-    p((char*)" <--- (0x%02X) <::status reg::>\n",Drives[currentDrive].statusRegister);
+    //p((char*)" <--- (0x%02X) <::status reg::>\n",Drives[currentDrive].statusRegister);
     
     //digitalWriteFast(INTERUPT_TO_TRS80, HIGH);
     return Drives[currentDrive].statusRegister;
@@ -422,7 +403,7 @@ inline int getDataRegister() {
        if(Drives[currentDrive].byteCtr == 0) {
           Drives[currentDrive].busyCtr = 3;
        }
-       Drives[currentDrive].dataRegister = diskFile[currentDrive].read();
+       Drives[currentDrive].dataRegister = Drives[currentDrive].diskFile.read();
     }
     
     p((char*)" <--- (0x%02X) <::data reg::> \n", Drives[currentDrive].dataRegister);
@@ -435,7 +416,7 @@ inline int getDataRegister() {
  * ***************************************************************
  */
 int PeekFromTRS80() {
-  p((char*)"%d.[%02X,%02X] <---: 0x%04X ",/*sectorsRead*/0,Drives[currentDrive].trackNum,Drives[currentDrive].sectorNum,address); 
+  //p((char*)"%d.[%02X,%02X] <---: 0x%04X ",/*sectorsRead*/0,Drives[currentDrive].trackNum,Drives[currentDrive].sectorNum,address); 
 
   if(address == 0x37ec) {             // read status register
     interruptStatus &= ~(0x40);
@@ -457,15 +438,15 @@ int PeekFromTRS80() {
   }  
 
   if(address == 0x37e0) {             // read interrupt latch (supposed to reset the latch)       
-    if((Drives[currentDrive].oldInterruptStatus & 0x80) == 0x80) {
+    if((oldInterruptStatus & 0x80) == 0x80) {
         digitalWriteFast(INTERUPT_TO_TRS80,HIGH);
         interruptStatus = 0;      
     }
  
-    p((char*)" <--- (0x%02X) <::interrupt latch::>\n",Drives[currentDrive].interruptStatus);
+    //p((char*)" <--- (0x%02X) <::interrupt latch::>\n",interruptStatus);
 
-    Drives[currentDrive].oldInterruptStatus = Drives[currentDrive].interruptStatus;
-    return Drives[currentDrive].interruptStatus;
+    oldInterruptStatus = interruptStatus;
+    return interruptStatus;
   }
 
   p((char*)" <--- (0xfe) <::HUH Why Am I Here?::>\n");

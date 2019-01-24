@@ -1,7 +1,6 @@
-File diskFile[5];
-String sDiskFileName[5];
 SdFatSdioEX sdEx;
 
+extern drivesettings Drives[4];
 
 
 
@@ -29,7 +28,7 @@ void catalog() {
            stream.write('/');
           }
           stream.flush();
-          p("%s\n",workStrm.c_str());
+          p((char*)"%s\n",workStrm.c_str());
           workStrm = "";
       }
       file.close();
@@ -65,8 +64,8 @@ void openDiskFileByName(String sFileName, int iDriveNum) {
           if(workStrm == sFileName) {
              p((char*)"Opening disk %d file: ",iDriveNum);
              p((char*)workStrm.c_str());
-             diskFile[iDriveNum] = sdEx.open(workStrm.c_str(), FILE_READ);
-             if(!diskFile[iDriveNum]) {
+             Drives[iDriveNum].diskFile = sdEx.open(workStrm.c_str(), FILE_READ);
+             if(!Drives[iDriveNum].diskFile) {
                 p((char*)"\nERROR:  Unable to open file\n");
                 L1_RED();
                 L2_RED();
@@ -74,7 +73,7 @@ void openDiskFileByName(String sFileName, int iDriveNum) {
                 return;
              }
              else {
-              p((char*)"\n%d bytes in file.\n",diskFile[iDriveNum].available());
+              p((char*)"\n%d bytes in file.\n",Drives[iDriveNum].diskFile.available());
              }
           }
           workStrm = "";
@@ -82,7 +81,7 @@ void openDiskFileByName(String sFileName, int iDriveNum) {
       file.close();
   }
 
-  sDiskFileName[iDriveNum] = sFileName;
+  Drives[iDriveNum].sDiskFileName = sFileName;
 
   return;
 }
