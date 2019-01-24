@@ -1,21 +1,23 @@
-String disk1FileName = "NEWDOS_80sssd_jv1.DSK";
-File disk1File;
+File diskFile[5];
+String sDiskFileName[5];
 SdFatSdioEX sdEx;
 
 
 
-void openDiskFileByName(String sFileName) {
+
+void catalog() {
   File file;
-  String strmOutput;
-  
-  StringStream stream(strmOutput); // set up string stream to capture SD card directory
-  
+  String workStrm;
+  StringStream stream(workStrm); // set up string stream to capture SD card directory
+
+    
+    
   if (!sdEx.begin()) {             // couldn't establish SD card connection
-      p((char*)"ERROR:  Unable to open SdFatSdioEX object.\n");
-      sdEx.initErrorHalt("SdFatSdioEX begin() failed");
-      L2_RED();
-      L1_RED();
-      return;
+        p((char*)"ERROR:  Unable to open SdFatSdioEX object.\n");
+        sdEx.initErrorHalt("SdFatSdioEX begin() failed");
+        L2_RED();
+        L1_RED();
+        return ;
   }
 
   sdEx.chvol();
@@ -27,11 +29,44 @@ void openDiskFileByName(String sFileName) {
            stream.write('/');
           }
           stream.flush();
-          if(strmOutput == sFileName) {
-             p((char*)"Opening disk 1 file: ");
-             p((char*)strmOutput.c_str());
-             disk1File = sdEx.open(strmOutput.c_str(), FILE_READ);
-             if(!disk1File) {
+          p("%s\n",workStrm.c_str());
+          workStrm = "";
+      }
+      file.close();
+  }
+
+}
+
+
+
+void openDiskFileByName(String sFileName, int iDriveNum) {
+  File file;
+  String workStrm;
+  
+  StringStream stream(workStrm); // set up string stream to capture SD card directory
+
+    if (!sdEx.begin()) {             // couldn't establish SD card connection
+        p((char*)"ERROR:  Unable to open SdFatSdioEX object.\n");
+        sdEx.initErrorHalt("SdFatSdioEX begin() failed");
+        L2_RED();
+        L1_RED();
+        return;
+  }
+
+  sdEx.chvol();
+  sdEx.vwd()->rewind();
+  while (file.openNext(sdEx.vwd(), O_RDONLY)) {
+      if(!file.isHidden()) {
+          file.printName(&stream);
+          if (file.isDir()) {
+           stream.write('/');
+          }
+          stream.flush();
+          if(workStrm == sFileName) {
+             p((char*)"Opening disk %d file: ",iDriveNum);
+             p((char*)workStrm.c_str());
+             diskFile[iDriveNum] = sdEx.open(workStrm.c_str(), FILE_READ);
+             if(!diskFile[iDriveNum]) {
                 p((char*)"\nERROR:  Unable to open file\n");
                 L1_RED();
                 L2_RED();
@@ -39,13 +74,15 @@ void openDiskFileByName(String sFileName) {
                 return;
              }
              else {
-              p((char*)"\n%d bytes in file.\n",disk1File.available());
+              p((char*)"\n%d bytes in file.\n",diskFile[iDriveNum].available());
              }
           }
-          strmOutput = "";
+          workStrm = "";
       }
       file.close();
   }
+
+  sDiskFileName[iDriveNum] = sFileName;
 
   return;
 }

@@ -3,7 +3,7 @@ void p(char *fmt, ... ){
     char buf[128];        
 
 // comment out the return statement for debugging purposes
-return;
+//return;
     
     va_list args;
     va_start (args, fmt );

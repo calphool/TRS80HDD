@@ -14,9 +14,8 @@
 #include "defines.h"
 
 
-extern File disk1File;
-extern String disk1FileName;
-extern volatile int motorRunningCtr;
+extern File diskFile[5];
+extern String sDiskFileName[5];
 extern volatile int sectorsRead;
 
 
@@ -170,7 +169,10 @@ void setup() {
   }
   
   configureInterrupts();                             // tie interrupt lines to code blocks
-  openDiskFileByName(disk1FileName);                 // open file specified from SD card
+  openDiskFileByName("NEWDOS_80sssd_jv1.DSK",0);                 // open file specified from SD card
+  openDiskFileByName("more-arcade-1_80sssd_jv1.DSK",1);                 // open file specified from SD card
+  openDiskFileByName("more-arcade-2_80sssd_jv1.DSK",2);                 // open file specified from SD card
+  openDiskFileByName("more-arcade-3_80sssd_jv1.DSK",3);                 // open file specified from SD card
   
   p((char*)"\nReady.\n");
   if(!Serial) {
@@ -193,9 +195,35 @@ void setup() {
 void clockTick() {
   // comment out if you want to turn off the clock functionality...
   interruptStatus = interruptStatus | 0x80;
-  digitalWriteFast(INTERUPT_TO_TRS80,LOW);
+  //digitalWriteFast(INTERUPT_TO_TRS80,LOW);
 }
 
 
-void loop() {  
+String sCommand;
+int dNum;
+void loop() { 
+
+   while (Serial.available() > 0 ) {
+       sCommand = Serial.readString().trim();
+       p("\nReceived command:  >>%s<<\n\n",sCommand.c_str());
+       
+       if(sCommand.indexOf("mount ") != -1) {
+           sCommand = sCommand.substring(sCommand.indexOf("mount ") + 6);
+           dNum = sCommand.substring(0,2).toInt();
+           sCommand = sCommand.substring(2);
+           p("Mounting disk image file: >>%s<< on drive %d\n",sCommand.c_str(),dNum);
+           openDiskFileByName(sCommand,dNum);
+           init1771Emulation();
+       }
+
+       if(sCommand.indexOf("catalog") != -1) {
+          catalog();
+       }
+
+       if(sCommand.indexOf("show mounts") != -1) {
+          for(int i=0;i<4;i++) {
+            p("%d. %s\n",i,sDiskFileName[i].c_str());
+          }
+       }
+   }
 }
