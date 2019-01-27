@@ -32,12 +32,23 @@ So, the way this emulated device works is that it has an address decoder that wa
 read and write signal lines, triggers a flip-flop that puts the Z80 processor in the CPU unit into a WAIT state, 
 invokes an interrupt on the Teensy, the Teensy reads an SD card for a disk image, and emulates the intent of the 
 read or write command against that disk image file.  Once the read or write is complete the Teensy kicks the flip-flop 
-and the WAIT state is released.  At least, that's the theory.  I'm still working through some timing issues before 
+and the WAIT state is released.  ~~At least, that's the theory.  I'm still working through some timing issues before 
 I start working in earnest on the Teensy code.  Basically I've got everything working right now except the data bus.
-The data bus seems to be doing nothing at the moment, and I haven't figured out exactly what's wrong yet.
+The data bus seems to be doing nothing at the moment, and I haven't figured out exactly what's wrong yet.~~
 
 Build Notes
 ===========
+
+January 26, 2019
+
+Well, I bodged a 32k SRAM onto the design.  Some NEWDOS games won't work because they expect (quite reasonably) that you have 48k of RAM,
+since the original TRS-80 expansion system included some RAM, and you couldn't really run a disk drive without having the extra RAM.  
+Version 4.2 of the schematic and board include this enhancement.
+
+So here's what I'm thinking about doing... I'm thinking about designing a set of three stackable boards (sort of like Arduino shields).  The 
+first board just gives you 32k of extra RAM, six channel (+2 noise) audio, and your power supply.  The second adds the TMS9118 video 
+(see TRS80GS) and joystick ports. The third adds the emulated disk drive.  So, you could build these boards and then snap them together as you like.
+
 
 January 22, 2019
 
