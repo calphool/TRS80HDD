@@ -384,12 +384,13 @@ set_blocking (int fd, int should_block)
 }
 
 
-void getResponse(char* requestedCmd) {
+void getResponse(char* requestedCmd, bool bWatchForKeyword) {
   char buf[1024];
   int iOffset = 0;
   int iBytesRead = 0;
 
-  strcpy(buf,">>");
+  // keyword search string
+  strcpy(buf,">>");  
   trim(requestedCmd);
   strcat(buf,requestedCmd);
   strcat(buf,"<<");
@@ -411,17 +412,19 @@ void getResponse(char* requestedCmd) {
       iOffset += iBytesRead;
       //printf("iOffset after: %d\n", iOffset);
       
-      char* cc= stristr(read_buffer, buf);
-      if(cc != 0x0) {
-        int iStartPoint = cc - read_buffer + (strlen(requestedCmd)+4);
-        int j = 0;
-        for(int i=iStartPoint;*(read_buffer+i) != 0x0;i++) {
-          write_buffer[j] = *(read_buffer+i);
-          write_buffer[j+1] = 0x0;
-          j++;
+      if(bWatchForKeyword) {
+        char* cc= stristr(read_buffer, buf);
+        if(cc != 0x0) {
+          int iStartPoint = cc - read_buffer + (strlen(requestedCmd)+4);
+          int j = 0;
+          for(int i=iStartPoint;*(read_buffer+i) != 0x0;i++) {
+            write_buffer[j] = *(read_buffer+i);
+            write_buffer[j+1] = 0x0;
+            j++;
+          }
+          memcpy(read_buffer, write_buffer, sizeof(read_buffer));
+          iOffset = strlen(read_buffer);
         }
-        memcpy(read_buffer, write_buffer, sizeof(read_buffer));
-        iOffset = strlen(read_buffer);
       }
 
       int c = strlen(read_buffer);
@@ -429,6 +432,7 @@ void getResponse(char* requestedCmd) {
         char ch1 = *(read_buffer+c-1);
         char ch2 = *(read_buffer+c-2);
 
+        // we are done reading when we get two carriage returns together at the end of the buffer
         if(ch1 == 0x0a || ch1 == 0x0d) {
           if(ch2 == 0x0a || ch2 == 0x0d) {
             //printf("bFinished=true\n");
@@ -466,13 +470,13 @@ void writeRequest(char* cmd) {
 
 
 
-void sendCommand(char* cmd, bool bDisplay) {
+void sendCommand(char* cmd, bool bWatchForKeyword, bool bDisplay) {
   //printf("sendCommand: %s\n",cmd);
   memset(write_buffer,0x0,sizeof(write_buffer));
   memset(read_buffer,0x0,sizeof(read_buffer));
 
   writeRequest(cmd);
-  getResponse(cmd);
+  getResponse(cmd,bWatchForKeyword);
 
   if(bDisplay)
      printf("%s\n", read_buffer);
@@ -480,8 +484,7 @@ void sendCommand(char* cmd, bool bDisplay) {
 
 
 int getValidCommands(command* commandStrings) {
-
-  sendCommand((char*)"help",false);
+  sendCommand((char*)"help",true,false);
 
   char* tok = strtok(read_buffer, "\r\n");
 
@@ -493,6 +496,73 @@ int getValidCommands(command* commandStrings) {
      j++;
   }
   return j;
+}
+
+
+void failIfNot(char* resp) {
+  trim(read_buffer);
+  String_Lower(read_buffer);
+  if(stricmp(read_buffer,resp) != 0) {
+     close(tty_fd);
+     printf("Expected '%s', received '%s'", resp, read_buffer);
+     perror("Did not receive proper response to command.\n");
+     exit(-97);
+  }
+}
+
+
+void handleUpload(char* sUploadString) {
+  FILE* fp;
+  char* upload = strtok(sUploadString, " ");
+  char* localFileName = strtok(NULL, " ");
+  char buf1[512];
+  char buf2[512];
+  char buf3[1024];
+
+  if(localFileName == NULL) {
+    close(tty_fd);
+    perror("You did not provide a file name to upload.\n");
+    exit(-99);
+  }
+
+  trim(localFileName);
+
+  fp = fopen(localFileName, "r");
+
+  if(fp == NULL) {
+    close(tty_fd);
+    perror("Unable to open file you specified to read it.\n");
+    exit(-98);
+  }
+
+  sendCommand(sUploadString,true,false);
+  failIfNot("ready");
+
+  int iBytesRead = -1;
+
+  long lFileChkSum = 0;
+  while(iBytesRead != 0) {
+     int chkSum = 0;
+     memset(buf1,0x0,sizeof(buf1));
+     memset(buf2,0x0,sizeof(buf2));
+     iBytesRead = fread(buf1, 1, 500, fp);
+     if(iBytesRead > 0) {
+         for(int i=0;i<iBytesRead;i++) {
+            chkSum += *(buf1+i);
+            lFileChkSum += *(buf1+i);
+         }
+         base64Encode(buf1, iBytesRead, buf2);
+         sprintf(buf3,"chunk %04X %s\n",chkSum,buf2);
+         sendCommand(buf3,false,false);
+         failIfNot("ready");
+     }
+     else {
+         sprintf(buf3,"done %08X\n",lFileChkSum);
+         sendCommand(buf3,false,false);
+         failIfNot("ok");
+     }
+  }
+  close(fp);
 }
 
 
@@ -572,12 +642,14 @@ int main(int argc,char** argv)
     exit(-2);
   }
 
+  
   // at this point, user requested a valid command, so lets send it and see what the response is
-
-  sendCommand(desiredCommand,true);
+  if(startsWith(desiredCommand,"upload ")) {  // upload is special since it involves transactional processing
+      handleUpload(desiredCommand);
+  }
+  else  // all other commands are request/reply
+      sendCommand(desiredCommand,true,true);
 
   close(tty_fd);
-
-
   return 0;
 }
