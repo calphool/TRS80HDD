@@ -41,6 +41,7 @@ void catalog() {
 void openDiskFileByName(String sFileName, int iDriveNum) {
   File file;
   String workStrm;
+  boolean bLoaded = false;
   
   StringStream stream(workStrm); // set up string stream to capture SD card directory
 
@@ -66,7 +67,7 @@ void openDiskFileByName(String sFileName, int iDriveNum) {
              p((char*)workStrm.c_str());
              Drives[iDriveNum].diskFile = sdEx.open(workStrm.c_str(), FILE_READ);
              if(!Drives[iDriveNum].diskFile) {
-                p((char*)"\nERROR:  Unable to open file\n");
+                p((char*)"ERROR:  Unable to open file\n");
                 L1_RED();
                 L2_RED();
                 file.close();
@@ -74,6 +75,7 @@ void openDiskFileByName(String sFileName, int iDriveNum) {
              }
              else {
               p((char*)"\n%d bytes in file.\n",Drives[iDriveNum].diskFile.available());
+              bLoaded = true;
              }
           }
           workStrm = "";
@@ -81,7 +83,10 @@ void openDiskFileByName(String sFileName, int iDriveNum) {
       file.close();
   }
 
-  Drives[iDriveNum].sDiskFileName = sFileName;
+  if(bLoaded == true)
+      Drives[iDriveNum].sDiskFileName = sFileName;
+  else
+      p((char*)"ERROR: Unable to load file %s.\n",sFileName);
 
   return;
 }

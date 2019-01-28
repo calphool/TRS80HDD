@@ -195,6 +195,7 @@ void clockTick() {
 
 String sCommand;
 int dNum;
+
 void loop() { 
 
    while (Serial.available() > 0 ) {
@@ -208,16 +209,27 @@ void loop() {
            p((char*)"Mounting disk image file: >>%s<< on drive %d\n",sCommand.c_str(),dNum);
            openDiskFileByName(sCommand,dNum);
            init1771Emulation();
+           p("\n");
        }
 
        if(sCommand.indexOf("catalog") != -1) {
           catalog();
+          p("\n\n");
        }
 
        if(sCommand.indexOf("show mounts") != -1) {
           for(int i=0;i<4;i++) {
             p((char*)"%d. %s\n",i,Drives[i].sDiskFileName.c_str());
           }
+          p("\n");
+       }
+
+       if(sCommand.indexOf("help") != -1) {
+           p((char*)"mount\n");
+           p((char*)"show mounts\n");
+           p((char*)"catalog\n");
+           p((char*)"help\n");  
+           p((char*)"\n");      
        }
    }
 }
