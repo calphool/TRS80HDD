@@ -17,14 +17,14 @@
 #define OK 0
 
 
-typedef struct {
-  char cmdString[256];
-}
-command;
 
 /****************************************************************************
 globals
 *****************************************************************************/
+typedef struct {
+  char cmdString[256];
+}
+command;
 unsigned int iSerialDeviceCtr = 0;
 unsigned int iActiveDevice = -1;
 char serialDeviceNames[256][256];
