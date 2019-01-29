@@ -578,6 +578,24 @@ int main(int argc,char** argv)
 	RETURNCODE r;
   setbuf(stdout, NULL);
 
+
+  if(argc == 1) {
+    printf("TRS80HDD Utility - Copyright (c) 2019, Joe Rounceville, All rights reserved.\n");
+    printf("----------------------------------------------------------------------------\n");
+    printf("Usage:\n");
+    printf("  ./trs80util -tty [optional tty device] -cmd [commands]    =  specific TRS80HDD device name and specific command\n");
+    printf("  ./trs80util -cmd [commands]                               =  default TRS80HDD device name and speciifc command\n");
+    printf("  ./trs80util [commands]                                    =  default TRS80HDD device name and specific commands\n");
+    printf("\n");
+    printf("Examples:\n");
+    printf("  ./trs80util -cmd \"catalog\"                                =  show TRS80HDD catalog of disk images\n");
+    printf("  ./trs80util show mounts                                   =  show what disk images are mounted to which virtual drives\n");
+    printf("  ./trs80util mount 1 mydisk.DSK                            =  mount 'mydisk.DSK' to virtual drive 1\n");
+    printf("  ./trs80util help                                          =  get list of valid commands understood by TRS80HDD device\n\n");
+    exit(0);
+  }
+
+
 	memset(desiredDevice,0x0,sizeof(desiredDevice));
 
   for(int i=1;i<argc;i++) {
