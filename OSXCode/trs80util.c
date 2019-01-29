@@ -11,6 +11,7 @@
 #include <sys/ioctl.h>
 #include <ctype.h>
 #include <glob.h>
+#include <errno.h>
 
 
 #define RETURNCODE int
@@ -29,7 +30,6 @@ unsigned int iSerialDeviceCtr = 0;
 unsigned int iActiveDevice = -1;
 char serialDeviceNames[256][256];
 char buf[4096];
-char workbuff[512];
 char write_buffer[4096];
 char read_buffer[4096];
 
@@ -274,8 +274,151 @@ void sleep_ms(int milliseconds) {
     nanosleep(&ts, NULL);
 }
 
+static const unsigned char base64_table[65] =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-char* base64Encode( char* in, int iLen,  char* out) {
+/**
+ * base64_encode - Base64 encode
+ * @src: Data to be encoded
+ * @len: Length of the data to be encoded
+ * @out_len: Pointer to output length variable, or %NULL if not used
+ * Returns: Allocated buffer of out_len bytes of encoded data,
+ * or %NULL on failure
+ *
+ * Caller is responsible for freeing the returned buffer. Returned buffer is
+ * nul terminated to make it easier to use as a C string. The nul terminator is
+ * not included in out_len.
+ */
+unsigned char * base64Encode(const unsigned char *src, size_t len,
+            size_t *out_len)
+{
+  unsigned char *out, *pos;
+  const unsigned char *end, *in;
+  size_t olen;
+  int line_len;
+
+  olen = len * 4 / 3 + 4; /* 3-byte blocks to 4-byte */
+  olen += olen / 72; /* line feeds */
+  olen++; /* nul termination */
+  if (olen < len)
+    return NULL; /* integer overflow */
+  out = malloc(olen);
+  if (out == NULL)
+    return NULL;
+
+  end = src + len;
+  in = src;
+  pos = out;
+  line_len = 0;
+  while (end - in >= 3) {
+    *pos++ = base64_table[in[0] >> 2];
+    *pos++ = base64_table[((in[0] & 0x03) << 4) | (in[1] >> 4)];
+    *pos++ = base64_table[((in[1] & 0x0f) << 2) | (in[2] >> 6)];
+    *pos++ = base64_table[in[2] & 0x3f];
+    in += 3;
+    line_len += 4;
+    if (line_len >= 72) {
+      *pos++ = '~';
+      line_len = 0;
+    }
+  }
+
+  if (end - in) {
+    *pos++ = base64_table[in[0] >> 2];
+    if (end - in == 1) {
+      *pos++ = base64_table[(in[0] & 0x03) << 4];
+      *pos++ = '=';
+    } else {
+      *pos++ = base64_table[((in[0] & 0x03) << 4) |
+                (in[1] >> 4)];
+      *pos++ = base64_table[(in[1] & 0x0f) << 2];
+    }
+    *pos++ = '=';
+    line_len += 4;
+  }
+
+  if (line_len)
+    *pos++ = '~';
+
+  *pos = '\0';
+  if (out_len)
+    *out_len = pos - out;
+  return out;
+}
+
+
+/**
+ * base64_decode - Base64 decode
+ * @src: Data to be decoded
+ * @len: Length of the data to be decoded
+ * @out_len: Pointer to output length variable
+ * Returns: Allocated buffer of out_len bytes of decoded data,
+ * or %NULL on failure
+ *
+ * Caller is responsible for freeing the returned buffer.
+ */
+unsigned char * base64Decode(const unsigned char *src, size_t len,
+            size_t *out_len)
+{
+  unsigned char dtable[256], *out, *pos, block[4], tmp;
+  size_t i, count, olen;
+  int pad = 0;
+
+  memset(dtable, 0x80, 256);
+  for (i = 0; i < sizeof(base64_table) - 1; i++)
+    dtable[base64_table[i]] = (unsigned char) i;
+  dtable['='] = 0;
+
+  count = 0;
+  for (i = 0; i < len; i++) {
+    if (dtable[src[i]] != 0x80)
+      count++;
+  }
+
+  if (count == 0 || count % 4)
+    return NULL;
+
+  olen = count / 4 * 3;
+  pos = out = malloc(olen);
+  if (out == NULL)
+    return NULL;
+
+  count = 0;
+  for (i = 0; i < len; i++) {
+    tmp = dtable[src[i]];
+    if (tmp == 0x80)
+      continue;
+
+    if (src[i] == '=')
+      pad++;
+    block[count] = tmp;
+    count++;
+    if (count == 4) {
+      *pos++ = (block[0] << 2) | (block[1] >> 4);
+      *pos++ = (block[1] << 4) | (block[2] >> 2);
+      *pos++ = (block[2] << 6) | block[3];
+      count = 0;
+      if (pad) {
+        if (pad == 1)
+          pos--;
+        else if (pad == 2)
+          pos -= 2;
+        else {
+          /* Invalid padding */
+          free(out);
+          return NULL;
+        }
+        break;
+      }
+    }
+  }
+
+  *out_len = pos - out;
+  return out;
+}
+
+/*
+int base64Encode( char* in, int iLen,  char* out) {
     size_t sz;
     typedef unsigned long UL;
     unsigned char c[4];
@@ -288,13 +431,13 @@ char* base64Encode( char* in, int iLen,  char* out) {
     FILE* fpIn = fmemopen(in, iLen, "rb");
     if(fpIn == NULL) {
         printf("  base64 encoding failure, fmemopen\n");
-        return 0;
+        return -1;
     }
 
     FILE* fpOut = open_memstream (&out, &sz);
     if(fpOut == NULL) {
         printf("  base64 encoding failure, open_memstream\n");
-        return 0;
+        return -1;
     }
 
     do {
@@ -316,11 +459,10 @@ char* base64Encode( char* in, int iLen,  char* out) {
     fclose(fpIn);
     fclose(fpOut);
 
-    szBuf = sz;
 
-    return out;
+    return sz;
 }
-
+*/
 
 
 int
@@ -459,9 +601,28 @@ void getResponse(char* requestedCmd, bool bWatchForKeyword) {
 void writeRequest(char* cmd) {
   strcpy(write_buffer,cmd);
   strcat(write_buffer,"\n");
-  int bytesWritten = write(tty_fd,write_buffer,strlen(write_buffer)+1);
+  int bWrittenTotal = 0;
+  int sLen = strlen(cmd);
+  int iLoopCtr = 0;
 
-  if(bytesWritten <= strlen(cmd)+1) {
+  //printf("  wr/slen:%d\n",sLen);
+
+  while(iLoopCtr < 10 && bWrittenTotal <= sLen+1) { 
+      int bytesWritten = write(tty_fd,write_buffer+bWrittenTotal,strlen(write_buffer)+1 - bWrittenTotal);
+      if(bytesWritten > 0) {
+        bWrittenTotal += bytesWritten;
+      }
+      else {
+        printf(" write error: %s\n",strerror(errno));
+      }
+      iLoopCtr++;
+      if(iLoopCtr > 1) {
+        printf(" bw:%d/lc:%d\n",bytesWritten,iLoopCtr);
+        sleep_ms(1000);
+      }
+  }
+
+  if(iLoopCtr >= 10) {
     perror("Unable to write to TRS80HDD interface.");
     close(tty_fd);
     exit(-1);
@@ -504,7 +665,7 @@ void failIfNot(char* resp) {
   String_Lower(read_buffer);
   if(stricmp(read_buffer,resp,strlen(read_buffer)) != 0) {
      close(tty_fd);
-     printf("Expected '%s', received '%s'", resp, read_buffer);
+     printf("Expected '%s', received '%s'\n", resp, read_buffer);
      perror("Did not receive proper response to command.\n");
      exit(-97);
   }
@@ -515,9 +676,9 @@ void handleUpload(char* sUploadString) {
   FILE* fp;
   char* upload = strtok(sUploadString, " ");
   char* localFileName = strtok(NULL, " ");
-  char buf1[512];
-  char buf2[512];
-  char buf3[1024];
+  unsigned char buf1[4096];
+  unsigned char buf2[4096];
+  char buf3[4096];
 
   if(localFileName == NULL) {
     close(tty_fd);
@@ -535,26 +696,53 @@ void handleUpload(char* sUploadString) {
     exit(-98);
   }
 
-  sendCommand(sUploadString,true,false);
+  strcpy(buf1,"upload ");
+  strcat(buf1,localFileName);
+  sendCommand(buf1,true,false);
   failIfNot("ready");
 
   int iBytesRead = -1;
+  int chunkCtr = 0;
 
   long lFileChkSum = 0;
   while(iBytesRead != 0) {
      int chkSum = 0;
      memset(buf1,0x0,sizeof(buf1));
      memset(buf2,0x0,sizeof(buf2));
-     iBytesRead = fread(buf1, 1, 500, fp);
+     iBytesRead = fread(buf1, 1, 725, fp);
      if(iBytesRead > 0) {
          for(int i=0;i<iBytesRead;i++) {
             chkSum += *(buf1+i);
             lFileChkSum += *(buf1+i);
          }
-         base64Encode(buf1, iBytesRead, buf2);
-         sprintf(buf3,"chunk %04X %s\n",chkSum,buf2);
-         sendCommand(buf3,false,false);
-         failIfNot("ready");
+
+         size_t iEncodedSize = 0;
+         unsigned char* b = base64Encode(buf1, iBytesRead, &iEncodedSize);
+         if(iEncodedSize <= sizeof(buf2))
+             memcpy(buf2,b,iEncodedSize);
+         else {
+          close(tty_fd);
+          fclose(fp);
+          printf("buffer size: %ld\n", iEncodedSize);
+          perror("base64Encode failed due to buffer size.\n");
+          exit(-95);          
+         }
+         //int iEncodedSize = base64Encode(buf1, iBytesRead, buf2);
+         if(iEncodedSize >= 0) {
+           //printf("$$%s$$ **%d** ##%ld## >>%s<<\n",buf1, iBytesRead, iEncodedSize, buf2);
+           printf(".");
+           chunkCtr++;
+           if(chunkCtr % 80 == 0) printf("\n");
+           sprintf(buf3,"chunk %08X %s$$$\n",chkSum,buf2);
+           sendCommand(buf3,false,false);
+           failIfNot("ready");
+         }
+         else {
+          close(tty_fd);
+          fclose(fp);
+          perror("Unable to base64 encode file.\n");
+          exit(-96);
+         }
      }
      else {
          sprintf(buf3,"done %08lX\n",lFileChkSum);
@@ -563,6 +751,7 @@ void handleUpload(char* sUploadString) {
      }
   }
   fclose(fp);
+  printf("ok\n");
 }
 
 
@@ -662,7 +851,7 @@ int main(int argc,char** argv)
 
   
   // at this point, user requested a valid command, so lets send it and see what the response is
-  if(startsWith(desiredCommand,"upload ")) {  // upload is special since it involves transactional processing
+  if(startsWith("upload ",desiredCommand)) {  // upload is special since it involves transactional processing
       handleUpload(desiredCommand);
   }
   else  // all other commands are request/reply

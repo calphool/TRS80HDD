@@ -194,13 +194,85 @@ void clockTick() {
 
 
 String sCommand;
+String sWorkBuffer;
 int dNum;
+boolean bInsideUploadCommand = false;
+String sFileName;
+
+void handleUploadProcess() {
+  if(bInsideUploadCommand == false) {
+   // we are preparing to upload a file... get ready to write file
+   sFileName = sCommand.substring(strlen("upload ")).trim();
+   sWorkBuffer = "";
+   if(fileExists((char*)sFileName.c_str()) )
+      p((char*)"ERROR: file already exists.");
+   else {
+     p((char*)"ready\n\n");
+     dNum = 0;
+     bInsideUploadCommand = true;
+   }
+   return;
+  }
+  else {
+    if(sCommand.indexOf("done ") == 0) {
+      bInsideUploadCommand = false;
+      //TODO: add checksum code here...
+      p((char*)"ok\n\n");
+      return;
+    }
+    if(sCommand.indexOf("chunk ") == 0) {
+      sCommand = sCommand.substring(6).trim();
+      String chkSum = sCommand.substring(0,8);
+      sCommand = sCommand.substring(8).trim();
+      sWorkBuffer = sCommand; 
+    }
+    else {
+      sWorkBuffer += sCommand;
+    }
+
+    if(sWorkBuffer.indexOf("$$$") == -1) return;
+      
+    sWorkBuffer = sWorkBuffer.substring(0,sWorkBuffer.length()-3);
+    
+    size_t buflen;
+    sWorkBuffer = sWorkBuffer.replace("~","\n");
+    char* buf = base64Decode((char*)sWorkBuffer.c_str(), sWorkBuffer.length(), &buflen);
+    if(buf == NULL) {
+      p((char*)"ERROR: problem decoding chunk\n\n");
+      bInsideUploadCommand = false;
+      return;      
+    }
+    dNum++;
+    
+    //TODO:  add checksum code here...
+    if(buflen > 0) { 
+        //p("%d ",buflen);
+        appendBufferToFile(buf, buflen, (char*)sFileName.c_str());
+        if(dNum % 2 == 0) {
+           L2_GREEN();
+        }
+        else {
+           L2_YELLOW();
+        }
+    }
+    else {
+      L2_BLACK();
+    }
+
+    free(buf);
+ 
+    p((char*)"ready\n\n"); 
+  }
+}
+
+
 
 void loop() { 
 
    while (Serial.available() > 0 ) {
        sCommand = Serial.readString().trim();
-       p((char*)"\nReceived command:  >>%s<<\n\n",sCommand.c_str());
+       if(!bInsideUploadCommand)
+           p((char*)"\nReceived command:  >>%s<<\n\n",sCommand.c_str());
        
        if(sCommand.indexOf("mount ") != -1) {
            sCommand = sCommand.substring(sCommand.indexOf("mount ") + 6);
@@ -209,27 +281,55 @@ void loop() {
            p((char*)"Mounting disk image file: >>%s<< on drive %d\n",sCommand.c_str(),dNum);
            openDiskFileByName(sCommand,dNum);
            init1771Emulation();
-           p("\n");
+           p((char*)"\n");
        }
 
        if(sCommand.indexOf("catalog") != -1) {
           catalog();
-          p("\n\n");
+          p((char*)"\n\n");
        }
 
        if(sCommand.indexOf("show mounts") != -1) {
           for(int i=0;i<4;i++) {
             p((char*)"%d. %s\n",i,Drives[i].sDiskFileName.c_str());
           }
-          p("\n");
+          p((char*)"\n");
+       }
+
+       if(sCommand.indexOf("rm ") == 0) {
+         sCommand = sCommand.substring(3);
+         if(delFile((char*)sCommand.c_str()))
+             p((char*)"ok\n\n");
+         else
+             p((char*)"ERROR: file not deleted\n\n");
+       }
+
+       if(sCommand.indexOf("view ") == 0) {
+         sCommand = sCommand.substring(5);
+         viewFile((char*)sCommand.c_str(),false);
+         p((char*)"\n\n");         
+       }
+
+       if(sCommand.indexOf("viewhex ") == 0) {
+         sCommand = sCommand.substring(8);
+         viewFile((char*)sCommand.c_str(),true);
+         p((char*)"\n\n");         
        }
 
        if(sCommand.indexOf("help") != -1) {
            p((char*)"mount\n");
            p((char*)"show mounts\n");
            p((char*)"catalog\n");
-           p((char*)"help\n");  
+           p((char*)"upload\n");
+           p((char*)"rm\n");
+           p((char*)"view\n");
+           p((char*)"viewhex\n");
+           p((char*)"help\n"); 
            p((char*)"\n");      
+       }
+
+       if(sCommand.indexOf("upload") != -1 || bInsideUploadCommand == true) {
+          handleUploadProcess();
        }
    }
 }
