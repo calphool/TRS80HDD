@@ -502,7 +502,7 @@ int getValidCommands(command* commandStrings) {
 void failIfNot(char* resp) {
   trim(read_buffer);
   String_Lower(read_buffer);
-  if(stricmp(read_buffer,resp) != 0) {
+  if(stricmp(read_buffer,resp,strlen(read_buffer)) != 0) {
      close(tty_fd);
      printf("Expected '%s', received '%s'", resp, read_buffer);
      perror("Did not receive proper response to command.\n");
@@ -557,12 +557,12 @@ void handleUpload(char* sUploadString) {
          failIfNot("ready");
      }
      else {
-         sprintf(buf3,"done %08X\n",lFileChkSum);
+         sprintf(buf3,"done %08lX\n",lFileChkSum);
          sendCommand(buf3,false,false);
          failIfNot("ok");
      }
   }
-  close(fp);
+  fclose(fp);
 }
 
 
